@@ -1,0 +1,442 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>编辑笔记 - 陌恋</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            -webkit-tap-highlight-color: transparent;
+            font-family: -apple-system, BlinkMacSystemFont, "SF Pro Display", "PingFang SC", "Helvetica Neue", sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(180deg, #F8F9FD 0%, #FAFBFF 100%);
+            overflow-x: hidden;
+        }
+        
+        .phone-frame {
+            width: 393px;
+            height: 852px;
+            margin: 20px auto;
+            background: #000;
+            border-radius: 50px;
+            padding: 3px;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+            position: relative;
+        }
+        
+        .phone-screen {
+            width: 100%;
+            height: 100%;
+            background: #FFFFFF;
+            border-radius: 47px;
+            overflow: hidden;
+            position: relative;
+        }
+        
+        .notch {
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 120px;
+            height: 30px;
+            background: #000;
+            border-radius: 0 0 20px 20px;
+            z-index: 1000;
+        }
+        
+        .gradient-primary {
+            background: linear-gradient(135deg, #9D31FF 0%, #F260FF 50%, #FF609F 100%);
+        }
+        
+        .btn-press:active {
+            transform: scale(0.95);
+        }
+        
+        .mood-btn {
+            width: 64px;
+            height: 64px;
+            border-radius: 16px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            background: white;
+            border: 2px solid #E5E7EB;
+            transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+            box-shadow: 0 1px 3px rgba(0, 0, 0, 0.04);
+        }
+        
+        .mood-btn.active {
+            border-color: #9D31FF;
+            background: linear-gradient(135deg, rgba(157, 49, 255, 0.1) 0%, rgba(242, 96, 255, 0.1) 100%);
+            transform: translateY(-4px);
+            box-shadow: 0 4px 12px rgba(157, 49, 255, 0.2);
+        }
+        
+        .mood-btn:active {
+            transform: scale(0.95);
+        }
+        
+        .image-upload-box {
+            width: 106px;
+            height: 106px;
+            border: 2px dashed #E5E7EB;
+            border-radius: 16px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.645, 0.045, 0.355, 1);
+            background: #F8F9FD;
+        }
+        
+        .image-upload-box:hover {
+            border-color: #9D31FF;
+            background: rgba(157, 49, 255, 0.05);
+            transform: translateY(-2px);
+        }
+        
+        .image-upload-box:active {
+            transform: scale(0.95);
+        }
+        
+        .image-container {
+            position: relative;
+            display: inline-block;
+            animation: imageAppear 0.3s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+        
+        @keyframes imageAppear {
+            from {
+                opacity: 0;
+                transform: scale(0.8);
+            }
+            to {
+                opacity: 1;
+                transform: scale(1);
+            }
+        }
+        
+        .uploaded-image {
+            width: 106px;
+            height: 106px;
+            border-radius: 16px;
+            object-fit: cover;
+            box-shadow: 0 2px 8px rgba(157, 49, 255, 0.12);
+        }
+        
+        .remove-image {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            width: 28px;
+            height: 28px;
+            background: linear-gradient(135deg, #EF4444 0%, #DC2626 100%);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 14px;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(239, 68, 68, 0.4);
+            transition: all 0.2s ease;
+        }
+        
+        .remove-image:hover {
+            transform: scale(1.1);
+        }
+        
+        .remove-image:active {
+            transform: scale(0.9);
+        }
+        
+        .toolbar-btn {
+            width: 44px;
+            height: 44px;
+            border-radius: 12px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: #F8F9FD;
+            color: #6B7280;
+            transition: all 0.3s ease;
+        }
+        
+        .toolbar-btn:active {
+            background: rgba(157, 49, 255, 0.1);
+            color: #9D31FF;
+        }
+    </style>
+</head>
+<body class="flex items-center justify-center min-h-screen">
+
+    <div class="phone-frame">
+        <div class="phone-screen">
+            <div class="notch"></div>
+            
+            <!-- 编辑笔记页面 -->
+            <div class="h-full flex flex-col">
+                <!-- 顶部导航 -->
+                <div class="bg-white pt-12 pb-4 px-5 flex items-center justify-between border-b border-gray-100">
+                    <button class="text-gray-600 btn-press">
+                        <i class="fas fa-arrow-left text-xl"></i>
+                    </button>
+                    <h1 class="text-lg font-semibold text-gray-900">写笔记</h1>
+                    <button class="gradient-primary text-white px-5 py-2 rounded-full text-sm font-medium btn-press">
+                        保存
+                    </button>
+                </div>
+                
+                <!-- 内容区 -->
+                <div class="flex-1 overflow-y-auto px-5 pt-5 pb-10">
+                    <!-- 日期时间 -->
+                    <div class="mb-5 flex items-center text-sm text-gray-500">
+                        <i class="far fa-calendar mr-2"></i>
+                        <span>2026年2月5日 星期四 14:30</span>
+                    </div>
+                    
+                    <!-- 标题输入 -->
+                    <input 
+                        type="text"
+                        class="w-full text-2xl font-bold text-gray-900 border-none focus:outline-none mb-4"
+                        placeholder="标题">
+                    
+                    <!-- 情绪选择 -->
+                    <div class="mb-5">
+                        <label class="text-sm text-gray-600 mb-3 block">今天的心情</label>
+                        <div class="flex gap-3 overflow-x-auto pb-2">
+                            <button class="mood-btn btn-press active">
+                                <span class="text-2xl mb-1">😊</span>
+                                <span class="text-xs text-gray-600">开心</span>
+                            </button>
+                            <button class="mood-btn btn-press">
+                                <span class="text-2xl mb-1">😢</span>
+                                <span class="text-xs text-gray-600">难过</span>
+                            </button>
+                            <button class="mood-btn btn-press">
+                                <span class="text-2xl mb-1">😌</span>
+                                <span class="text-xs text-gray-600">平静</span>
+                            </button>
+                            <button class="mood-btn btn-press">
+                                <span class="text-2xl mb-1">😤</span>
+                                <span class="text-xs text-gray-600">生气</span>
+                            </button>
+                            <button class="mood-btn btn-press">
+                                <span class="text-2xl mb-1">😴</span>
+                                <span class="text-xs text-gray-600">疲惫</span>
+                            </button>
+                            <button class="mood-btn btn-press">
+                                <span class="text-2xl mb-1">🤗</span>
+                                <span class="text-xs text-gray-600">温暖</span>
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <!-- 正文输入 -->
+                    <div class="mb-5">
+                        <textarea 
+                            class="w-full text-gray-800 leading-relaxed border-none focus:outline-none resize-none"
+                            rows="10"
+                            placeholder="记录此刻的想法..."></textarea>
+                    </div>
+                    
+                    <!-- 图片上传 -->
+                    <div class="mb-5">
+                        <label class="text-sm font-medium text-gray-700 mb-3 block">
+                            <i class="fas fa-images mr-1.5 text-purple-600"></i>
+                            添加图片
+                            <span class="text-gray-400 font-normal">（最多9张）</span>
+                        </label>
+                        <div id="imageGrid" class="flex flex-wrap gap-3">
+                            <input type="file" id="imageInput" accept="image/*" multiple class="hidden">
+                            <div class="image-upload-box" onclick="document.getElementById('imageInput').click()">
+                                <div class="text-center">
+                                    <i class="fas fa-image text-3xl text-gray-400 mb-2"></i>
+                                    <div class="text-xs text-gray-500 font-medium">添加图片</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <!-- 天气记录 -->
+                    <div class="bg-gradient-to-r from-purple-50 to-pink-50 rounded-xl p-4 mb-5">
+                        <div class="flex items-center justify-between">
+                            <div class="flex items-center">
+                                <div class="text-3xl mr-3">☀️</div>
+                                <div>
+                                    <div class="text-sm font-medium text-gray-900">晴天</div>
+                                    <div class="text-xs text-gray-500">18°C ~ 25°C</div>
+                                </div>
+                            </div>
+                            <button class="text-sm text-purple-600 btn-press">更改</button>
+                        </div>
+                    </div>
+                    
+                    <!-- 标签 -->
+                    <div class="mb-5">
+                        <label class="text-sm text-gray-600 mb-3 block">添加标签</label>
+                        <div class="flex flex-wrap gap-2">
+                            <span class="px-3 py-1.5 bg-purple-100 text-purple-700 rounded-full text-sm">
+                                #生活
+                                <button class="ml-1 text-purple-500">×</button>
+                            </span>
+                            <button class="px-3 py-1.5 border-2 border-dashed border-gray-300 text-gray-500 rounded-full text-sm btn-press">
+                                + 添加标签
+                            </button>
+                        </div>
+                    </div>
+                </div>
+                
+                <!-- 底部工具栏 -->
+                <div class="bg-white border-t border-gray-100 px-5 py-3 flex items-center justify-around">
+                    <button class="toolbar-btn btn-press">
+                        <i class="fas fa-bold"></i>
+                    </button>
+                    <button class="toolbar-btn btn-press">
+                        <i class="fas fa-italic"></i>
+                    </button>
+                    <button class="toolbar-btn btn-press">
+                        <i class="fas fa-list-ul"></i>
+                    </button>
+                    <button class="toolbar-btn btn-press">
+                        <i class="fas fa-quote-right"></i>
+                    </button>
+                    <button class="toolbar-btn btn-press">
+                        <i class="fas fa-link"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // 情绪选择
+        document.querySelectorAll('.mood-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                document.querySelectorAll('.mood-btn').forEach(b => b.classList.remove('active'));
+                this.classList.add('active');
+            });
+        });
+        
+        // 图片上传处理
+        const imageInput = document.getElementById('imageInput');
+        const imageGrid = document.getElementById('imageGrid');
+        let uploadedImages = [];
+        const maxImages = 9;
+        
+        imageInput.addEventListener('change', function(e) {
+            const files = Array.from(e.target.files);
+            
+            files.forEach(file => {
+                if (uploadedImages.length >= maxImages) {
+                    alert(`最多只能上传${maxImages}张图片`);
+                    return;
+                }
+                
+                if (!file.type.startsWith('image/')) {
+                    alert('请选择图片文件');
+                    return;
+                }
+                
+                const reader = new FileReader();
+                reader.onload = function(e) {
+                    uploadedImages.push({
+                        id: Date.now() + Math.random(),
+                        url: e.target.result
+                    });
+                    renderImages();
+                };
+                reader.readAsDataURL(file);
+            });
+            
+            // 清空input，允许重复选择同一文件
+            this.value = '';
+        });
+        
+        function renderImages() {
+            // 清空现有图片（保留上传按钮）
+            const uploadBox = imageGrid.querySelector('.image-upload-box');
+            imageGrid.innerHTML = '';
+            
+            // 渲染已上传的图片
+            uploadedImages.forEach(img => {
+                const container = document.createElement('div');
+                container.className = 'image-container';
+                container.innerHTML = `
+                    <img src="${img.url}" class="uploaded-image" alt="上传的图片">
+                    <button class="remove-image" onclick="removeImage('${img.id}')">
+                        <i class="fas fa-times"></i>
+                    </button>
+                `;
+                imageGrid.appendChild(container);
+            });
+            
+            // 如果未达到最大数量，显示上传按钮
+            if (uploadedImages.length < maxImages) {
+                imageGrid.appendChild(uploadBox);
+            }
+        }
+        
+        function removeImage(id) {
+            uploadedImages = uploadedImages.filter(img => img.id !== id);
+            renderImages();
+        }
+        
+        // 自动保存提示
+        let saveTimeout;
+        const saveBtn = document.querySelector('.gradient-primary');
+        const originalText = saveBtn.innerHTML;
+        
+        document.querySelectorAll('input, textarea').forEach(input => {
+            input.addEventListener('input', function() {
+                clearTimeout(saveTimeout);
+                
+                // 显示保存中状态
+                saveBtn.innerHTML = '<i class="fas fa-spinner fa-spin mr-1"></i> 保存中';
+                saveBtn.style.opacity = '0.7';
+                
+                saveTimeout = setTimeout(() => {
+                    // 显示已保存状态
+                    saveBtn.innerHTML = '<i class="fas fa-check mr-1"></i> 已保存';
+                    saveBtn.style.opacity = '1';
+                    
+                    // 2秒后恢复原状
+                    setTimeout(() => {
+                        saveBtn.innerHTML = originalText;
+                    }, 2000);
+                    
+                    console.log('自动保存...');
+                }, 1000);
+            });
+        });
+        
+        // 工具栏按钮交互
+        document.querySelectorAll('.toolbar-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                // 添加点击反馈
+                this.style.background = 'rgba(157, 49, 255, 0.2)';
+                this.style.color = '#9D31FF';
+                
+                setTimeout(() => {
+                    this.style.background = '';
+                    this.style.color = '';
+                }, 200);
+            });
+        });
+        
+        // 标签删除
+        document.querySelectorAll('.px-3.py-1\\.5.bg-purple-100 button').forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                e.stopPropagation();
+                this.parentElement.remove();
+            });
+        });
+    </script>
+</body>
+</html>
