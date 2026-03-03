@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'dart:convert';
 import 'package:http/http.dart' as http;
+import 'user_manager.dart';
 
 class AIAssistantScreen extends StatefulWidget {
   const AIAssistantScreen({super.key});
@@ -14,6 +15,10 @@ class _AIAssistantScreenState extends State<AIAssistantScreen> {
   final ScrollController _scrollController = ScrollController();
   final List<Map<String, dynamic>> _messages = [];
   bool _isLoading = false;
+  final UserManager _userManager = UserManager();
+  
+  // 每次对话消耗的金币数量
+  static const int _coinsPerMessage = 10;
 
   // DeepSeek API配置
   static const String _apiKey = 'sk-438e8baf84c04ddda29e36a27128a75d';
@@ -22,27 +27,41 @@ class _AIAssistantScreenState extends State<AIAssistantScreen> {
   @override
   void initState() {
     super.initState();
+    // 监听用户信息变化
+    _userManager.addListener(_onUserInfoChanged);
     // 添加欢迎消息
     _messages.add({
       'role': 'assistant',
-      'content': '你好！我是AI助手，有什么可以帮助你的吗？😊',
+      'content': '你好！我是AI助手，有什么可以帮助你的吗？😊\n\n💡 温馨提示：每次对话消耗10金币',
       'timestamp': DateTime.now(),
     });
   }
 
   @override
   void dispose() {
+    _userManager.removeListener(_onUserInfoChanged);
     _messageController.dispose();
     _scrollController.dispose();
     super.dispose();
+  }
+  
+  void _onUserInfoChanged() {
+    setState(() {});
   }
 
   Future<void> _sendMessage() async {
     final message = _messageController.text.trim();
     if (message.isEmpty || _isLoading) return;
 
-    // 添加用户消息
+    // 检查金币是否足够并消耗
+    if (!_userManager.consumeCoins(_coinsPerMessage)) {
+      _showInsufficientCoinsDialog();
+      return;
+    }
+
+    // 更新UI
     setState(() {
+      // 添加用户消息
       _messages.add({
         'role': 'user',
         'content': message,
@@ -85,9 +104,18 @@ class _AIAssistantScreenState extends State<AIAssistantScreen> {
           _isLoading = false;
         });
       } else {
-        throw Exception('API请求失败: ${response.statusCode}');
+        // API请求失败，显示错误（不退还金币）
+        setState(() {
+          _messages.add({
+            'role': 'assistant',
+            'content': '抱歉，API请求失败（状态码: ${response.statusCode}）',
+            'timestamp': DateTime.now(),
+          });
+          _isLoading = false;
+        });
       }
     } catch (e) {
+      // 发生错误，显示错误（不退还金币）
       setState(() {
         _messages.add({
           'role': 'assistant',
@@ -99,6 +127,51 @@ class _AIAssistantScreenState extends State<AIAssistantScreen> {
     }
 
     _scrollToBottom();
+  }
+  
+  void _showInsufficientCoinsDialog() {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+        ),
+        title: const Text(
+          '金币不足',
+          style: TextStyle(
+            fontWeight: FontWeight.w600,
+            color: Color(0xFF9D31FF),
+          ),
+          textAlign: TextAlign.center,
+        ),
+        content: Text(
+          '当前金币：${_userManager.coins}\n需要金币：$_coinsPerMessage\n\n金币不足，无法继续对话',
+          style: const TextStyle(height: 1.5),
+          textAlign: TextAlign.center,
+        ),
+        actions: [
+          Center(
+            child: TextButton(
+              onPressed: () => Navigator.pop(context),
+              style: TextButton.styleFrom(
+                padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
+                backgroundColor: const Color(0xFF9D31FF),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+              ),
+              child: const Text(
+                '确定',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 16,
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
   }
 
   void _scrollToBottom() {
@@ -155,18 +228,43 @@ class _AIAssistantScreenState extends State<AIAssistantScreen> {
                         ),
                       ],
                     ),
-                    Container(
-                      width: 40,
-                      height: 40,
-                      decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.2),
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child: const Icon(
-                        Icons.smart_toy_outlined,
-                        color: Colors.white,
-                        size: 24,
-                      ),
+                    Column(
+                      children: [
+                        Container(
+                          padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                          decoration: BoxDecoration(
+                            color: Colors.white.withOpacity(0.2),
+                            borderRadius: BorderRadius.circular(20),
+                          ),
+                          child: Row(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              const Icon(
+                                Icons.monetization_on,
+                                color: Colors.amber,
+                                size: 18,
+                              ),
+                              const SizedBox(width: 4),
+                              Text(
+                                '${_userManager.coins}',
+                                style: const TextStyle(
+                                  color: Colors.white,
+                                  fontSize: 16,
+                                  fontWeight: FontWeight.bold,
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                        const SizedBox(height: 4),
+                        Text(
+                          '每次对话-10',
+                          style: TextStyle(
+                            color: Colors.white.withOpacity(0.7),
+                            fontSize: 11,
+                          ),
+                        ),
+                      ],
                     ),
                   ],
                 ),

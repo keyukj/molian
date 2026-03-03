@@ -90,6 +90,14 @@ class SettingsScreen extends StatelessWidget {
             subtitle: '隐私保护政策',
             onTap: () => _launchURL('https://sites.google.com/view/molianysxy/%E9%A6%96%E9%A1%B5'),
           ),
+          const SizedBox(height: 12),
+          _buildSettingItem(
+            context,
+            icon: Icons.person_remove_outlined,
+            title: '注销账号',
+            subtitle: '永久删除账号及数据',
+            onTap: () => _showDeleteAccountDialog(context),
+          ),
           const SizedBox(height: 32),
           _buildLogoutButton(context),
         ],
@@ -249,6 +257,51 @@ class SettingsScreen extends StatelessWidget {
             child: const Text(
               '确定',
               style: TextStyle(color: Color(0xFF9D31FF)),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+  
+  void _showDeleteAccountDialog(BuildContext context) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(20),
+        ),
+        title: const Text(
+          '注销账号',
+          style: TextStyle(
+            fontWeight: FontWeight.w600,
+            color: Colors.red,
+          ),
+        ),
+        content: const Text(
+          '是否注销该账号？\n注销后账号及所有数据将被永久删除，无法恢复',
+          style: TextStyle(height: 1.5),
+        ),
+        actions: [
+          TextButton(
+            onPressed: () => Navigator.pop(context),
+            child: Text(
+              '取消',
+              style: TextStyle(color: Colors.grey[600]),
+            ),
+          ),
+          TextButton(
+            onPressed: () {
+              // 重置用户信息
+              UserManager().reset();
+              Navigator.pop(context); // 关闭对话框
+              
+              // 返回登录页面
+              Navigator.of(context).pushNamedAndRemoveUntil('/', (route) => false);
+            },
+            child: const Text(
+              '确定',
+              style: TextStyle(color: Colors.red),
             ),
           ),
         ],

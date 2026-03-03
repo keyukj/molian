@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:flutter/gestures.dart';
+import 'register_screen.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({super.key});
@@ -14,6 +15,11 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
   late Animation<double> _fadeAnimation;
   late Animation<Offset> _slideAnimation;
   bool _isAgreed = false;
+  
+  // 账号密码控制器
+  final TextEditingController _accountController = TextEditingController();
+  final TextEditingController _passwordController = TextEditingController();
+  bool _obscurePassword = true;
 
   @override
   void initState() {
@@ -46,6 +52,8 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
   @override
   void dispose() {
     _controller.dispose();
+    _accountController.dispose();
+    _passwordController.dispose();
     super.dispose();
   }
 
@@ -137,6 +145,57 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
       ),
     );
   }
+  
+  void _showErrorDialog(String message) {
+    showDialog(
+      context: context,
+      builder: (context) => AlertDialog(
+        backgroundColor: Colors.white,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16),
+        ),
+        title: const Text(
+          '提示',
+          style: TextStyle(
+            fontWeight: FontWeight.bold,
+            fontSize: 18,
+            color: Colors.black87,
+          ),
+          textAlign: TextAlign.center,
+        ),
+        content: Text(
+          message,
+          style: const TextStyle(
+            fontSize: 15,
+            color: Colors.black87,
+            height: 1.5,
+          ),
+          textAlign: TextAlign.center,
+        ),
+        actions: [
+          Center(
+            child: TextButton(
+              onPressed: () => Navigator.pop(context),
+              style: TextButton.styleFrom(
+                padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
+                backgroundColor: const Color(0xFF9D31FF),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(8),
+                ),
+              ),
+              child: const Text(
+                '确定',
+                style: TextStyle(
+                  color: Colors.white,
+                  fontSize: 16,
+                ),
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -199,7 +258,40 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
                     ),
                   ),
                   
-                  const Spacer(flex: 3),
+                  const Spacer(flex: 2),
+                  
+                  // 输入框区域
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 32),
+                    child: Column(
+                      children: [
+                        // 账号输入框
+                        _buildInputField(
+                          controller: _accountController,
+                          hintText: '请输入账号',
+                          icon: Icons.person_outline,
+                        ),
+                        
+                        const SizedBox(height: 16),
+                        
+                        // 密码输入框
+                        _buildInputField(
+                          controller: _passwordController,
+                          hintText: '请输入密码',
+                          icon: Icons.lock_outline,
+                          isPassword: true,
+                          obscureText: _obscurePassword,
+                          onTogglePassword: () {
+                            setState(() {
+                              _obscurePassword = !_obscurePassword;
+                            });
+                          },
+                        ),
+                      ],
+                    ),
+                  ),
+                  
+                  const Spacer(flex: 2),
                   
                   // 登录按钮区域
                   Padding(
@@ -218,12 +310,62 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
                           ),
                           textColor: Colors.white,
                           onTap: () {
-                            if (_isAgreed) {
-                              Navigator.of(context).pushReplacementNamed('/home');
-                            } else {
+                            if (!_isAgreed) {
                               _showAgreementDialog();
+                              return;
                             }
+                            
+                            // 验证账号密码
+                            String account = _accountController.text.trim();
+                            String password = _passwordController.text.trim();
+                            
+                            if (account.isEmpty) {
+                              _showErrorDialog('请输入账号');
+                              return;
+                            }
+                            
+                            if (password.isEmpty) {
+                              _showErrorDialog('请输入密码');
+                              return;
+                            }
+                            
+                            // 只要账号和密码都填写了就可以登录
+                            Navigator.of(context).pushReplacementNamed('/home');
                           },
+                        ),
+                        
+                        const SizedBox(height: 24),
+                        
+                        // 注册提示
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Text(
+                              '还没有账号？',
+                              style: TextStyle(
+                                fontSize: 14,
+                                color: Colors.grey[600],
+                              ),
+                            ),
+                            GestureDetector(
+                              onTap: () {
+                                Navigator.push(
+                                  context,
+                                  MaterialPageRoute(
+                                    builder: (context) => const RegisterScreen(),
+                                  ),
+                                );
+                              },
+                              child: const Text(
+                                '立即注册',
+                                style: TextStyle(
+                                  fontSize: 14,
+                                  color: Color(0xFF9D31FF),
+                                  fontWeight: FontWeight.w600,
+                                ),
+                              ),
+                            ),
+                          ],
                         ),
                         
                         const SizedBox(height: 24),
@@ -334,6 +476,66 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
         child: Image.asset(
           'assets/logo.jpg',
           fit: BoxFit.cover,
+        ),
+      ),
+    );
+  }
+  
+  Widget _buildInputField({
+    required TextEditingController controller,
+    required String hintText,
+    required IconData icon,
+    bool isPassword = false,
+    bool obscureText = false,
+    VoidCallback? onTogglePassword,
+  }) {
+    return Container(
+      decoration: BoxDecoration(
+        color: Colors.white,
+        borderRadius: BorderRadius.circular(16),
+        boxShadow: [
+          BoxShadow(
+            color: Colors.black.withOpacity(0.04),
+            blurRadius: 8,
+            offset: const Offset(0, 2),
+          ),
+        ],
+      ),
+      child: TextField(
+        controller: controller,
+        obscureText: isPassword && obscureText,
+        style: const TextStyle(
+          fontSize: 16,
+          color: Colors.black87,
+        ),
+        decoration: InputDecoration(
+          hintText: hintText,
+          hintStyle: TextStyle(
+            fontSize: 15,
+            color: Colors.grey[400],
+          ),
+          prefixIcon: Icon(
+            icon,
+            color: const Color(0xFF9D31FF),
+            size: 22,
+          ),
+          suffixIcon: isPassword
+              ? IconButton(
+                  icon: Icon(
+                    obscureText ? Icons.visibility_off_outlined : Icons.visibility_outlined,
+                    color: Colors.grey[400],
+                    size: 22,
+                  ),
+                  onPressed: onTogglePassword,
+                )
+              : null,
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(16),
+            borderSide: BorderSide.none,
+          ),
+          filled: true,
+          fillColor: Colors.white,
+          contentPadding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
         ),
       ),
     );

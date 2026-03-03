@@ -1,3 +1,4 @@
+
 import 'package:flutter/material.dart';
 import 'dart:io';
 import 'splash_screen.dart';
@@ -10,6 +11,7 @@ import 'note_detail_screen.dart';
 import 'user_profile_screen.dart';
 import 'ai_assistant_screen.dart';
 import 'user_manager.dart';
+import 'molianIAP/molianStoreView.dart';
 
 void main() {
   runApp(const MolianApp());
@@ -520,85 +522,6 @@ class _FeedScreenState extends State<FeedScreen> {
         });
       },
       onMoreTap: () => _showOthersPostMenu(context, name, feedIndex),
-    );
-  }
-
-  Widget _buildImageGrid(List<String> images) {
-    if (images.isEmpty) return const SizedBox();
-
-    if (images.length == 1) {
-      return ClipRRect(
-        borderRadius: BorderRadius.circular(8),
-        child: AspectRatio(
-          aspectRatio: 16 / 9,
-          child: Image.network(
-            images[0],
-            fit: BoxFit.cover,
-          ),
-        ),
-      );
-    } else if (images.length == 2) {
-      return SizedBox(
-        height: 150,
-        child: Row(
-          children: images
-              .map((url) => Expanded(
-                    child: Padding(
-                      padding: EdgeInsets.only(
-                        right: url == images.last ? 0 : 8,
-                      ),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(8),
-                        child: Image.network(
-                          url,
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                    ),
-                  ))
-              .toList(),
-        ),
-      );
-    } else {
-      return GridView.builder(
-        shrinkWrap: true,
-        physics: const NeverScrollableScrollPhysics(),
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 3,
-          crossAxisSpacing: 8,
-          mainAxisSpacing: 8,
-          childAspectRatio: 1,
-        ),
-        itemCount: images.length > 9 ? 9 : images.length,
-        itemBuilder: (context, index) {
-          return ClipRRect(
-            borderRadius: BorderRadius.circular(8),
-            child: Image.network(
-              images[index],
-              fit: BoxFit.cover,
-            ),
-          );
-        },
-      );
-    }
-  }
-
-  Widget _buildActionButton({
-    required IconData icon,
-    required String label,
-    required Color color,
-  }) {
-    return Row(
-      children: [
-        Icon(icon, color: color, size: 20),
-        if (label.isNotEmpty) ...[
-          const SizedBox(width: 4),
-          Text(
-            label,
-            style: TextStyle(color: color, fontSize: 14),
-          ),
-        ],
-      ],
     );
   }
 
@@ -1576,6 +1499,102 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           ),
                         ),
                       ],
+                    ),
+                  ),
+                  const SizedBox(height: 16),
+                  // 金币余额卡片
+                  GestureDetector(
+                    onTap: () async {
+                      await Navigator.push(
+                        context,
+                        MaterialPageRoute(builder: (context) => const MolianStoreView()),
+                      );
+                      // 返回后刷新UI（UserManager会自动通知）
+                      setState(() {});
+                    },
+                    child: Container(
+                      margin: const EdgeInsets.symmetric(horizontal: 20),
+                      padding: const EdgeInsets.all(20),
+                      decoration: BoxDecoration(
+                        gradient: LinearGradient(
+                          colors: [Color(0xFFFFB75E), Color(0xFFED8F03)],
+                          begin: Alignment.topLeft,
+                          end: Alignment.bottomRight,
+                        ),
+                        borderRadius: BorderRadius.circular(20),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Color(0xFFFFB75E).withOpacity(0.3),
+                            blurRadius: 15,
+                            offset: Offset(0, 8),
+                          ),
+                        ],
+                      ),
+                      child: Row(
+                        children: [
+                          Container(
+                            padding: EdgeInsets.all(12),
+                            decoration: BoxDecoration(
+                              color: Colors.white.withOpacity(0.2),
+                              shape: BoxShape.circle,
+                            ),
+                            child: Icon(
+                              Icons.diamond,
+                              color: Colors.white,
+                              size: 28,
+                            ),
+                          ),
+                          SizedBox(width: 16),
+                          Expanded(
+                            child: Column(
+                              crossAxisAlignment: CrossAxisAlignment.start,
+                              children: [
+                                Text(
+                                  '金币余额',
+                                  style: TextStyle(
+                                    color: Colors.white.withOpacity(0.9),
+                                    fontSize: 14,
+                                  ),
+                                ),
+                                SizedBox(height: 4),
+                                Text(
+                                  '${_userManager.coins}',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 28,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          ),
+                          Container(
+                            padding: EdgeInsets.symmetric(horizontal: 16, vertical: 10),
+                            decoration: BoxDecoration(
+                              color: Colors.white.withOpacity(0.2),
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                            child: Row(
+                              children: [
+                                Text(
+                                  '充值',
+                                  style: TextStyle(
+                                    color: Colors.white,
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.bold,
+                                  ),
+                                ),
+                                SizedBox(width: 4),
+                                Icon(
+                                  Icons.arrow_forward_ios,
+                                  color: Colors.white,
+                                  size: 14,
+                                ),
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                   const SizedBox(height: 24),

@@ -14,6 +14,7 @@ class UserManager extends ChangeNotifier {
   String _nickname = '小雨';
   String _signature = '生活需要仪式感 ✨';
   String? _avatarPath;
+  int _coins = 60; // 初始金币数量
   
   // 拉黑用户列表（存储被拉黑用户的名字）
   final Set<String> _blockedUsers = {};
@@ -22,6 +23,7 @@ class UserManager extends ChangeNotifier {
   String get nickname => _nickname;
   String get signature => _signature;
   String? get avatarPath => _avatarPath;
+  int get coins => _coins;
   Set<String> get blockedUsers => Set.unmodifiable(_blockedUsers);
   
   // 获取头像路径（如果没有自定义头像，返回默认头像）
@@ -62,11 +64,28 @@ class UserManager extends ChangeNotifier {
     notifyListeners();
   }
   
+  // 消耗金币
+  bool consumeCoins(int amount) {
+    if (_coins >= amount) {
+      _coins -= amount;
+      notifyListeners();
+      return true;
+    }
+    return false;
+  }
+  
+  // 增加金币
+  void addCoins(int amount) {
+    _coins += amount;
+    notifyListeners();
+  }
+  
   // 重置用户信息（退出登录时调用）
   void reset() {
     _nickname = '小雨';
     _signature = '生活需要仪式感 ✨';
     _avatarPath = null;
+    _coins = 60;
     _blockedUsers.clear();
     notifyListeners();
   }
