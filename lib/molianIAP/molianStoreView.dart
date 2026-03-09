@@ -4,6 +4,7 @@ import 'molianPurchaseManager.dart';
 import 'molianPurchaseBundle.dart';
 import 'package:in_app_purchase/in_app_purchase.dart';
 import '../user_manager.dart';
+import '../widgets/coin_icon.dart';
 
 class MolianStoreView extends StatefulWidget {
   const MolianStoreView({Key? key}) : super(key: key);
@@ -250,7 +251,7 @@ class _MolianStoreViewState extends State<MolianStoreView>
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-            color: Color(0xFF9D31FF).withOpacity(0.3),
+            color: Color(0x4D9D31FF), // 0.3 opacity
             blurRadius: 20,
             offset: Offset(0, 10),
           ),
@@ -261,14 +262,10 @@ class _MolianStoreViewState extends State<MolianStoreView>
           Container(
             padding: EdgeInsets.all(12),
             decoration: BoxDecoration(
-              color: Colors.white.withOpacity(0.2),
+              color: Color(0x33FFFFFF), // 0.2 opacity white
               shape: BoxShape.circle,
             ),
-            child: Icon(
-              Icons.account_balance_wallet_rounded,
-              color: Colors.white,
-              size: 32,
-            ),
+            child: CoinIcon(size: 32, showShadow: false),
           ),
           SizedBox(width: 16),
           Expanded(
@@ -278,7 +275,7 @@ class _MolianStoreViewState extends State<MolianStoreView>
                 Text(
                   '当前余额',
                   style: TextStyle(
-                    color: Colors.white.withOpacity(0.9),
+                    color: Color(0xE6FFFFFF), // 0.9 opacity white
                     fontSize: 14,
                   ),
                 ),
@@ -294,19 +291,20 @@ class _MolianStoreViewState extends State<MolianStoreView>
               ],
             ),
           ),
-          Icon(
-            Icons.diamond,
-            color: Colors.white.withOpacity(0.8),
-            size: 40,
-          ),
         ],
       ),
     );
   }
 
   Widget _buildProductList() {
-    return ListView.builder(
+    return GridView.builder(
       padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 3, // 3列
+        crossAxisSpacing: 12, // 列间距
+        mainAxisSpacing: 12, // 行间距
+        childAspectRatio: 0.72, // 调整为0.72以提供更多垂直空间
+      ),
       itemCount: _shopItems.length,
       itemBuilder: (context, index) {
         return _buildProductCard(_shopItems[index], index);
@@ -319,31 +317,15 @@ class _MolianStoreViewState extends State<MolianStoreView>
     final bool isAvailable = product != null;
     final bool isThisProcessing = _processingProductId == bundle.itemId;
 
-    // 不同档位使用不同的渐变色
-    final List<List<Color>> gradients = [
-      [Color(0xFFFFB75E), Color(0xFFED8F03)], // 橙色
-      [Color(0xFF667EEA), Color(0xFF764BA2)], // 紫色
-      [Color(0xFFFA709A), Color(0xFFFEE140)], // 粉红到黄
-      [Color(0xFF30CFD0), Color(0xFF330867)], // 青到深紫
-      [Color(0xFFFF6B6B), Color(0xFFFFE66D)], // 红到黄
-      [Color(0xFF4FACFE), Color(0xFF00F2FE)], // 蓝色
-      [Color(0xFF43E97B), Color(0xFF38F9D7)], // 绿色
-      [Color(0xFFFA8BFF), Color(0xFF2BD2FF)], // 粉到青
-      [Color(0xFFFFD700), Color(0xFFFF8C00)], // 金色
-    ];
-
-    final gradient = gradients[index % gradients.length];
-
     return Container(
-      margin: EdgeInsets.only(bottom: 16),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: gradient[0].withOpacity(0.2),
-            blurRadius: 12,
-            offset: Offset(0, 4),
+            color: Color(0x26000000), // 0.15 opacity grey
+            blurRadius: 8,
+            offset: Offset(0, 3),
           ),
         ],
       ),
@@ -355,119 +337,102 @@ class _MolianStoreViewState extends State<MolianStoreView>
               ? () => _handlePurchase(bundle)
               : null,
           child: Padding(
-            padding: EdgeInsets.all(16),
-            child: Row(
+            padding: EdgeInsets.all(8),
+            child: Column(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [
-                // 左侧图标
+                // 顶部图标 - 浅黄色背景
                 Container(
-                  width: 70,
-                  height: 70,
+                  width: 40,
+                  height: 40,
                   decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      colors: gradient,
-                      begin: Alignment.topLeft,
-                      end: Alignment.bottomRight,
-                    ),
-                    borderRadius: BorderRadius.circular(12),
+                    color: Color(0xFFFCECB2),
+                    borderRadius: BorderRadius.circular(10),
                     boxShadow: [
                       BoxShadow(
-                        color: gradient[0].withOpacity(0.3),
-                        blurRadius: 8,
-                        offset: Offset(0, 4),
+                        color: Color(0x80FCECB2), // 0.5 opacity
+                        blurRadius: 4,
+                        offset: Offset(0, 2),
                       ),
                     ],
                   ),
-                  child: Icon(
-                    Icons.diamond_rounded,
-                    color: Colors.white,
-                    size: 36,
+                  child: Center(
+                    child: CoinIcon(size: 24, showShadow: false),
                   ),
                 ),
-                SizedBox(width: 16),
-                // 中间信息
-                Expanded(
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(
-                        bundle.name,
-                        style: TextStyle(
-                          fontSize: 18,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.black87,
-                        ),
-                      ),
-                      SizedBox(height: 6),
-                      Row(
-                        children: [
-                          Icon(
-                            Icons.diamond_outlined,
-                            size: 18,
-                            color: gradient[0],
-                          ),
-                          SizedBox(width: 4),
-                          Text(
-                            '${bundle.coinAmount} 金币',
-                            style: TextStyle(
-                              fontSize: 15,
-                              color: Colors.grey[700],
-                              fontWeight: FontWeight.w500,
-                            ),
-                          ),
-                        ],
-                      ),
-                      SizedBox(height: 4),
-                      Text(
-                        product?.price ?? bundle.price,
-                        style: TextStyle(
-                          fontSize: 20,
-                          fontWeight: FontWeight.bold,
-                          color: gradient[0],
-                        ),
-                      ),
-                    ],
+                SizedBox(height: 4),
+                // 金币数量
+                Text(
+                  '${bundle.coinAmount}',
+                  style: TextStyle(
+                    fontSize: 17,
+                    fontWeight: FontWeight.bold,
+                    color: Colors.black87,
                   ),
                 ),
-                // 右侧购买按钮
+                Text(
+                  '金币',
+                  style: TextStyle(
+                    fontSize: 10,
+                    color: Colors.grey[600],
+                  ),
+                ),
+                SizedBox(height: 2),
+                // 价格
+                Text(
+                  product?.price ?? bundle.price,
+                  style: TextStyle(
+                    fontSize: 13,
+                    fontWeight: FontWeight.bold,
+                    color: Color(0xFFFF8F00),
+                  ),
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                ),
+                SizedBox(height: 4),
+                // 购买按钮 - 主题紫色
                 Container(
-                  padding: EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                  width: double.infinity,
+                  height: 26,
                   decoration: BoxDecoration(
                     gradient: LinearGradient(
                       colors: (isAvailable && !isThisProcessing)
-                          ? gradient
+                          ? [Color(0xFF9D31FF), Color(0xFFB85EFF)]
                           : [Colors.grey[300]!, Colors.grey[400]!],
                       begin: Alignment.topLeft,
                       end: Alignment.bottomRight,
                     ),
-                    borderRadius: BorderRadius.circular(12),
+                    borderRadius: BorderRadius.circular(8),
                     boxShadow: (isAvailable && !isThisProcessing)
                         ? [
                             BoxShadow(
-                              color: gradient[0].withOpacity(0.3),
-                              blurRadius: 8,
-                              offset: Offset(0, 4),
+                              color: Color(0x4D9D31FF), // 0.3 opacity
+                              blurRadius: 3,
+                              offset: Offset(0, 1),
                             ),
                           ]
                         : [],
                   ),
-                  child: isThisProcessing
-                      ? SizedBox(
-                          width: 20,
-                          height: 20,
-                          child: CircularProgressIndicator(
-                            strokeWidth: 2,
-                            valueColor:
-                                AlwaysStoppedAnimation<Color>(Colors.white),
+                  child: Center(
+                    child: isThisProcessing
+                        ? SizedBox(
+                            width: 12,
+                            height: 12,
+                            child: CircularProgressIndicator(
+                              strokeWidth: 2,
+                              valueColor:
+                                  AlwaysStoppedAnimation<Color>(Colors.white),
+                            ),
+                          )
+                        : Text(
+                            '购买',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 12,
+                              fontWeight: FontWeight.bold,
+                            ),
                           ),
-                        )
-                      : Text(
-                          '购买',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 16,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
+                  ),
                 ),
               ],
             ),
