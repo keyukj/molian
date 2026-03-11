@@ -1,8 +1,8 @@
 #!/bin/bash
 
-# 陌恋 App 原型服务器启动脚本
+# 探友 App 原型服务器启动脚本
 
-echo "🚀 启动陌恋 App 原型服务器..."
+echo "🚀 启动探友 App 原型服务器..."
 echo ""
 echo "📱 可用页面："
 echo "   - http://localhost:8000/index.html (主应用界面)"

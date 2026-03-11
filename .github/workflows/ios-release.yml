@@ -49,7 +49,7 @@ jobs:
       - name: Upload using iTMSTransporter
         env:
           WORKING_DIRECTORY: build/ios/ipa
-          IPA_FILE_NAME: 陌恋.ipa
+          IPA_FILE_NAME: 探友.ipa
           APPLE_USERNAME: huang11huang223@163.com
           APPLE_PASSWORD: ymqv-rqap-zncj-bkqk
           APPLE_ASC_PROVIDER: Z3FKF6BF5P

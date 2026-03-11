@@ -211,7 +211,7 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
                             ],
                           ).createShader(bounds),
                           child: const Text(
-                            '陌恋',
+                            '探友',
                             style: TextStyle(
                               fontSize: 36,
                               fontWeight: FontWeight.bold,
@@ -269,7 +269,7 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
       child: ClipRRect(
         borderRadius: BorderRadius.circular(32),
         child: Image.asset(
-          'assets/logo.jpg',
+          'assets/logo.png',
           fit: BoxFit.cover,
         ),
       ),

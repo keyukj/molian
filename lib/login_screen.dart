@@ -236,7 +236,7 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
                       ],
                     ).createShader(bounds),
                     child: const Text(
-                      '陌恋',
+                      '探友',
                       style: TextStyle(
                         fontSize: 32,
                         fontWeight: FontWeight.bold,
@@ -474,7 +474,7 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
       child: ClipRRect(
         borderRadius: BorderRadius.circular(28),
         child: Image.asset(
-          'assets/logo.jpg',
+          'assets/logo.png',
           fit: BoxFit.cover,
         ),
       ),

@@ -24,7 +24,7 @@ class MolianApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: '陌恋',
+      title: '探友',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
         primaryColor: const Color(0xFF9D31FF),
@@ -379,7 +379,7 @@ class _FeedScreenState extends State<FeedScreen> {
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(10),
                         child: Image.asset(
-                          'assets/logo.jpg',
+                          'assets/logo.png',
                           fit: BoxFit.cover,
                         ),
                       ),
@@ -393,7 +393,7 @@ class _FeedScreenState extends State<FeedScreen> {
                             colors: [Color(0xFF9D31FF), Color(0xFFF260FF)],
                           ).createShader(bounds),
                           child: const Text(
-                            '陌恋',
+                            '探友',
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 20,

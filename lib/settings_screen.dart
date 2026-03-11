@@ -66,7 +66,7 @@ class SettingsScreen extends StatelessWidget {
             context,
             icon: Icons.info_outline,
             title: '关于我们',
-            subtitle: '了解陌恋',
+            subtitle: '了解探友',
             onTap: () {
               Navigator.push(
                 context,
