@@ -34,7 +34,7 @@ class CoinIcon extends StatelessWidget {
         boxShadow: showShadow
             ? [
                 BoxShadow(
-                  color: const Color(0xFFFF8F00).withOpacity(0.4),
+                  color: const Color(0xFFFF8F00).withValues(alpha: 0.4),
                   blurRadius: size * 0.3,
                   offset: Offset(0, size * 0.1),
                 ),
@@ -60,7 +60,7 @@ class StarPainter extends CustomPainter {
       ..style = PaintingStyle.fill;
 
     final shadowPaint = Paint()
-      ..color = const Color(0xFFFFB300).withOpacity(0.3)
+      ..color = const Color(0xFFFFB300).withValues(alpha: 0.3)
       ..maskFilter = const MaskFilter.blur(BlurStyle.normal, 2);
 
     final path = _createStarPath(size);

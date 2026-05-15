@@ -123,7 +123,7 @@ class _PublishNoteScreenState extends State<PublishNoteScreen> with SingleTicker
                     borderRadius: BorderRadius.circular(20),
                     boxShadow: [
                       BoxShadow(
-                        color: const Color(0xFF9D31FF).withOpacity(0.3),
+                        color: const Color(0xFF9D31FF).withValues(alpha: 0.3),
                         blurRadius: 8,
                         offset: const Offset(0, 2),
                       ),
@@ -245,14 +245,14 @@ class _PublishNoteScreenState extends State<PublishNoteScreen> with SingleTicker
                       boxShadow: isSelected
                           ? [
                               BoxShadow(
-                                color: const Color(0xFF9D31FF).withOpacity(0.2),
+                                color: const Color(0xFF9D31FF).withValues(alpha: 0.2),
                                 blurRadius: 12,
                                 offset: const Offset(0, 4),
                               ),
                             ]
                           : [
                               BoxShadow(
-                                color: Colors.black.withOpacity(0.04),
+                                color: Colors.black.withValues(alpha: 0.04),
                                 blurRadius: 4,
                                 offset: const Offset(0, 1),
                               ),
@@ -363,7 +363,7 @@ class _PublishNoteScreenState extends State<PublishNoteScreen> with SingleTicker
             color: Colors.grey[200],
             boxShadow: [
               BoxShadow(
-                color: const Color(0xFF9D31FF).withOpacity(0.1),
+                color: const Color(0xFF9D31FF).withValues(alpha: 0.1),
                 blurRadius: 8,
                 offset: const Offset(0, 2),
               ),
@@ -392,7 +392,7 @@ class _PublishNoteScreenState extends State<PublishNoteScreen> with SingleTicker
                 shape: BoxShape.circle,
                 boxShadow: [
                   BoxShadow(
-                    color: Colors.red.withOpacity(0.4),
+                    color: Colors.red.withValues(alpha: 0.4),
                     blurRadius: 8,
                     offset: const Offset(0, 2),
                   ),

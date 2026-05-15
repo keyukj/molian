@@ -30,6 +30,8 @@
 	<string>需要访问您的相机以拍摄照片</string>
 	<key>NSPhotoLibraryUsageDescription</key>
 	<string>需要访问您的相册以选择照片</string>
+	<key>NSUserTrackingUsageDescription</key>
+	<string>为了给您提供更好的使用体验</string>
 	<key>UIApplicationSupportsIndirectInputEvents</key>
 	<true/>
 	<key>UILaunchStoryboardName</key>

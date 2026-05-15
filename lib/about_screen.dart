@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'dart:math' as math;
 
 class AboutScreen extends StatelessWidget {
   const AboutScreen({super.key});
@@ -39,7 +38,7 @@ class AboutScreen extends StatelessWidget {
                   borderRadius: BorderRadius.circular(32),
                   boxShadow: [
                     BoxShadow(
-                      color: const Color(0xFF9D31FF).withOpacity(0.3),
+                      color: const Color(0xFF9D31FF).withValues(alpha: 0.3),
                       blurRadius: 24,
                       offset: const Offset(0, 8),
                     ),
@@ -86,7 +85,7 @@ class AboutScreen extends StatelessWidget {
                   borderRadius: BorderRadius.circular(20),
                   boxShadow: [
                     BoxShadow(
-                      color: const Color(0xFF9D31FF).withOpacity(0.08),
+                      color: const Color(0xFF9D31FF).withValues(alpha: 0.08),
                       blurRadius: 8,
                       offset: const Offset(0, 2),
                     ),

@@ -132,7 +132,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                     end: Alignment.bottomCenter,
                     colors: [
                       Colors.white,
-                      const Color(0xFFF8F9FD).withOpacity(0.3),
+                      const Color(0xFFF8F9FD).withValues(alpha: 0.3),
                     ],
                   ),
                 ),
@@ -152,7 +152,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                       borderRadius: BorderRadius.circular(24),
                       boxShadow: [
                         BoxShadow(
-                          color: const Color(0xFF9D31FF).withOpacity(0.08),
+                          color: const Color(0xFF9D31FF).withValues(alpha: 0.08),
                           blurRadius: 20,
                           offset: const Offset(0, 8),
                         ),
@@ -176,7 +176,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                                   ),
                                   boxShadow: [
                                     BoxShadow(
-                                      color: const Color(0xFF9D31FF).withOpacity(0.3),
+                                      color: const Color(0xFF9D31FF).withValues(alpha: 0.3),
                                       blurRadius: 12,
                                       offset: const Offset(0, 4),
                                     ),
@@ -425,7 +425,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
           borderRadius: BorderRadius.circular(12),
           boxShadow: [
             BoxShadow(
-              color: const Color(0xFF9D31FF).withOpacity(0.08),
+              color: const Color(0xFF9D31FF).withValues(alpha: 0.08),
               blurRadius: 8,
               offset: const Offset(0, 2),
             ),
@@ -662,7 +662,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                 width: 44,
                 height: 44,
                 decoration: BoxDecoration(
-                  color: color.withOpacity(0.1),
+                  color: color.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Icon(icon, color: color, size: 22),

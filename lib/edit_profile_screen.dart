@@ -10,15 +10,15 @@ class EditProfileScreen extends StatefulWidget {
 }
 
 class _EditProfileScreenState extends State<EditProfileScreen> {
-  final TextEditingController _nicknameController = TextEditingController(text: '小雨');
-  final TextEditingController _signatureController = TextEditingController(text: '生活需要仪式感 ✨');
-  final TextEditingController _ageController = TextEditingController(text: '25');
-  final ImagePicker _picker = ImagePicker();
+  final _nicknameController = TextEditingController(text: '小雨');
+  final _signatureController = TextEditingController(text: '生活需要仪式感 ✨');
+  final _ageController = TextEditingController(text: '25');
+  final _picker = ImagePicker();
   XFile? _avatarImage;
   String _selectedGender = '女';
-  final List<String> _selectedInterests = ['美食', '旅行'];
+  final _selectedInterests = ['美食', '旅行'];
   
-  final List<String> _allInterests = [
+  final _allInterests = [
     '美食', '旅行', '摄影', '音乐', '电影', '阅读', 
     '运动', '游戏', '宠物', '绘画', '写作', '舞蹈'
   ];
@@ -100,7 +100,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 ),
                 boxShadow: [
                   BoxShadow(
-                    color: const Color(0xFF9D31FF).withOpacity(0.3),
+                    color: const Color(0xFF9D31FF).withValues(alpha: 0.3),
                     blurRadius: 12,
                     offset: const Offset(0, 4),
                   ),
@@ -151,7 +151,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFF9D31FF).withOpacity(0.04),
+            color: const Color(0xFF9D31FF).withValues(alpha: 0.04),
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),
@@ -194,7 +194,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFF9D31FF).withOpacity(0.04),
+            color: const Color(0xFF9D31FF).withValues(alpha: 0.04),
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),
@@ -265,7 +265,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFF9D31FF).withOpacity(0.04),
+            color: const Color(0xFF9D31FF).withValues(alpha: 0.04),
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),
@@ -329,31 +329,27 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
 
   void _pickAvatar() async {
     try {
-      final XFile? image = await _picker.pickImage(
+      final image = await _picker.pickImage(
         source: ImageSource.gallery,
         maxWidth: 512,
         maxHeight: 512,
         imageQuality: 85,
       );
-      if (image != null) {
-        setState(() => _avatarImage = image);
-      }
+      if (image != null) setState(() => _avatarImage = image);
     } catch (e) {
-      if (mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          SnackBar(
-            content: const Text('选择头像失败，请重试'),
-            backgroundColor: Colors.red,
-            behavior: SnackBarBehavior.floating,
-            shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
-          ),
-        );
-      }
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: const Text('选择头像失败，请重试'),
+          backgroundColor: Colors.red,
+          behavior: SnackBarBehavior.floating,
+          shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+        ),
+      );
     }
   }
 
   void _saveProfile() {
-    // 返回修改后的数据
     final updatedProfile = {
       'nickname': _nicknameController.text,
       'signature': _signatureController.text,
@@ -378,7 +374,6 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
       ),
     );
     
-    // 返回数据到上一页
     Navigator.pop(context, updatedProfile);
   }
 }

@@ -1,0 +1,26 @@
+Framework 签名验证报告
+======================
+
+验证时间: $(date)
+
+检查: App.xcframework
+  状态: ✅ 签名有效
+
+检查: Flutter.xcframework
+  状态: ✅ 签名有效
+
+检查: app_tracking_transparency.xcframework
+  状态: ✅ 签名有效
+
+检查: image_picker_ios.xcframework
+  状态: ✅ 签名有效
+
+检查: in_app_purchase_storekit.xcframework
+  状态: ✅ 签名有效
+
+检查: shared_preferences_foundation.xcframework
+  状态: ✅ 签名有效
+
+检查: url_launcher_ios.xcframework
+  状态: ✅ 签名有效
+

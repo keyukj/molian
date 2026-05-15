@@ -1,5 +1,4 @@
 import 'package:flutter/material.dart';
-import 'dart:math' as math;
 
 class SplashScreen extends StatefulWidget {
   const SplashScreen({super.key});
@@ -97,7 +96,6 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
     await Future.delayed(const Duration(milliseconds: 600));
     _textController.forward();
     
-    // 3秒后跳转到登录页
     await Future.delayed(const Duration(milliseconds: 2500));
     if (mounted) {
       Navigator.of(context).pushReplacementNamed('/login');
@@ -134,8 +132,8 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
                       shape: BoxShape.circle,
                       gradient: LinearGradient(
                         colors: [
-                          const Color(0xFF9D31FF).withOpacity(0.3),
-                          const Color(0xFFF260FF).withOpacity(0.3),
+                          const Color(0xFF9D31FF).withValues(alpha: 0.3),
+                          const Color(0xFFF260FF).withValues(alpha: 0.3),
                         ],
                       ),
                     ),
@@ -159,8 +157,8 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
                       shape: BoxShape.circle,
                       gradient: LinearGradient(
                         colors: [
-                          const Color(0xFFF260FF).withOpacity(0.3),
-                          const Color(0xFFFF609F).withOpacity(0.3),
+                          const Color(0xFFF260FF).withValues(alpha: 0.3),
+                          const Color(0xFFFF609F).withValues(alpha: 0.3),
                         ],
                       ),
                     ),
@@ -260,7 +258,7 @@ class _SplashScreenState extends State<SplashScreen> with TickerProviderStateMix
         borderRadius: BorderRadius.circular(32),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFF9D31FF).withOpacity(0.3),
+            color: const Color(0xFF9D31FF).withValues(alpha: 0.3),
             blurRadius: 24,
             offset: const Offset(0, 8),
           ),

@@ -118,7 +118,7 @@ class SettingsScreen extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFF9D31FF).withOpacity(0.04),
+            color: const Color(0xFF9D31FF).withValues(alpha: 0.04),
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),
@@ -139,8 +139,8 @@ class SettingsScreen extends StatelessWidget {
                   decoration: BoxDecoration(
                     gradient: LinearGradient(
                       colors: [
-                        const Color(0xFF9D31FF).withOpacity(0.1),
-                        const Color(0xFFF260FF).withOpacity(0.1),
+                        const Color(0xFF9D31FF).withValues(alpha: 0.1),
+                        const Color(0xFFF260FF).withValues(alpha: 0.1),
                       ],
                     ),
                     borderRadius: BorderRadius.circular(14),
@@ -185,10 +185,10 @@ class SettingsScreen extends StatelessWidget {
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: Colors.red.withOpacity(0.2), width: 1),
+        border: Border.all(color: Colors.red.withValues(alpha: 0.2), width: 1),
         boxShadow: [
           BoxShadow(
-            color: Colors.red.withOpacity(0.04),
+            color: Colors.red.withValues(alpha: 0.04),
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),

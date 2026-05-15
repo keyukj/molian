@@ -29,19 +29,12 @@ class _MolianStoreViewState extends State<MolianStoreView>
   void initState() {
     super.initState();
     
-    print('Initializing MolianStoreView');
-    print('Current user coins: ${_userManager.coins}');
-    
-    // 设置购买回调
     _shopManager.onPurchaseComplete = _handlePurchaseSuccess;
     _shopManager.onPurchaseError = _handlePurchaseFailure;
-    
-    print('Purchase callbacks set');
     
     _shopItems = _shopManager.getAvailableBundles();
     _loadProducts();
     
-    // 监听用户信息变化
     _userManager.addListener(_onUserInfoChanged);
 
     _animController = AnimationController(
@@ -68,11 +61,10 @@ class _MolianStoreViewState extends State<MolianStoreView>
             _productDetails[bundle.itemId] = product;
           });
         } catch (e) {
-          print('Failed to load product ${bundle.itemId}: $e');
+          // 产品加载失败，继续加载其他产品
         }
       }
     } catch (e) {
-      print('Failed to initialize shop: $e');
       _showResultMessage('加载商店失败: ${e.toString()}');
     } finally {
       setState(() {
@@ -90,18 +82,15 @@ class _MolianStoreViewState extends State<MolianStoreView>
   }
 
   void _handlePurchaseSuccess(int purchasedAmount) {
-    print('Purchase success! Adding $purchasedAmount coins');
     _purchaseTimeout?.cancel();
     setState(() {
       _userManager.addCoins(purchasedAmount);
       _processingProductId = null;
     });
-    print('Current coins after purchase: ${_userManager.coins}');
     _showResultMessage('成功充值 $purchasedAmount 金币！');
   }
 
   void _handlePurchaseFailure(String errorMessage) {
-    print('Purchase failed: $errorMessage');
     _purchaseTimeout?.cancel();
     setState(() {
       _processingProductId = null;
@@ -123,34 +112,24 @@ class _MolianStoreViewState extends State<MolianStoreView>
   }
 
   Future<void> _handlePurchase(MolianPurchaseBundle bundle) async {
-    print('Attempting to purchase: ${bundle.name} (${bundle.itemId})');
-    
     if (_shopManager.isTransactionInProgress) {
-      print('Transaction already in progress, resetting...');
-      // 重置交易状态，允许重新购买
       _shopManager.resetTransactionState();
     }
 
     final product = _productDetails[bundle.itemId];
     if (product == null) {
-      print('Product not available: ${bundle.itemId}');
       _showResultMessage('商品暂不可用，请稍后再试');
       return;
     }
 
-    print('Setting processing product ID to: ${bundle.itemId}');
     setState(() {
       _processingProductId = bundle.itemId;
     });
 
-    // 设置30秒超时，如果没有收到回调，自动添加金币并重置状态
     _purchaseTimeout?.cancel();
     _purchaseTimeout = Timer(Duration(seconds: 30), () {
-      print('Purchase timeout! Auto-adding coins and resetting state...');
       if (mounted && _processingProductId == bundle.itemId) {
-        // 超时后自动添加金币
         _userManager.addCoins(bundle.coinAmount);
-        // 重置购买管理器的交易状态
         _shopManager.resetTransactionState();
         setState(() {
           _processingProductId = null;
@@ -160,11 +139,8 @@ class _MolianStoreViewState extends State<MolianStoreView>
     });
 
     try {
-      print('Initiating transaction...');
       await _shopManager.initiateTransaction(product);
-      print('Transaction initiated successfully');
     } catch (e) {
-      print('Transaction initiation failed: $e');
       _purchaseTimeout?.cancel();
       _shopManager.resetTransactionState();
       setState(() {

@@ -68,7 +68,7 @@ class HelpFeedbackScreen extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFF9D31FF).withOpacity(0.04),
+            color: const Color(0xFF9D31FF).withValues(alpha: 0.04),
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),
@@ -89,8 +89,8 @@ class HelpFeedbackScreen extends StatelessWidget {
                   decoration: BoxDecoration(
                     gradient: LinearGradient(
                       colors: [
-                        const Color(0xFF9D31FF).withOpacity(0.1),
-                        const Color(0xFFF260FF).withOpacity(0.1),
+                        const Color(0xFF9D31FF).withValues(alpha: 0.1),
+                        const Color(0xFFF260FF).withValues(alpha: 0.1),
                       ],
                     ),
                     borderRadius: BorderRadius.circular(14),

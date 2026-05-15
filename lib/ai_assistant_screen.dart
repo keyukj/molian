@@ -12,25 +12,20 @@ class AIAssistantScreen extends StatefulWidget {
 }
 
 class _AIAssistantScreenState extends State<AIAssistantScreen> {
-  final TextEditingController _messageController = TextEditingController();
-  final ScrollController _scrollController = ScrollController();
-  final List<Map<String, dynamic>> _messages = [];
+  final _messageController = TextEditingController();
+  final _scrollController = ScrollController();
+  final _messages = <Map<String, dynamic>>[];
   bool _isLoading = false;
-  final UserManager _userManager = UserManager();
+  final _userManager = UserManager();
   
-  // 每次对话消耗的金币数量
   static const int _coinsPerMessage = 10;
-
-  // DeepSeek API配置
   static const String _apiKey = 'sk-438e8baf84c04ddda29e36a27128a75d';
   static const String _apiUrl = 'https://api.deepseek.com/chat/completions';
 
   @override
   void initState() {
     super.initState();
-    // 监听用户信息变化
     _userManager.addListener(_onUserInfoChanged);
-    // 添加欢迎消息
     _messages.add({
       'role': 'assistant',
       'content': '你好！我是AI助手，有什么可以帮助你的吗？😊\n\n💡 温馨提示：每次对话消耗10金币',
@@ -54,15 +49,12 @@ class _AIAssistantScreenState extends State<AIAssistantScreen> {
     final message = _messageController.text.trim();
     if (message.isEmpty || _isLoading) return;
 
-    // 检查金币是否足够并消耗
     if (!_userManager.consumeCoins(_coinsPerMessage)) {
       _showInsufficientCoinsDialog();
       return;
     }
 
-    // 更新UI
     setState(() {
-      // 添加用户消息
       _messages.add({
         'role': 'user',
         'content': message,
@@ -75,7 +67,6 @@ class _AIAssistantScreenState extends State<AIAssistantScreen> {
     _scrollToBottom();
 
     try {
-      // 调用DeepSeek API
       final response = await http.post(
         Uri.parse(_apiUrl),
         headers: {
@@ -105,7 +96,6 @@ class _AIAssistantScreenState extends State<AIAssistantScreen> {
           _isLoading = false;
         });
       } else {
-        // API请求失败，显示错误（不退还金币）
         setState(() {
           _messages.add({
             'role': 'assistant',
@@ -116,7 +106,6 @@ class _AIAssistantScreenState extends State<AIAssistantScreen> {
         });
       }
     } catch (e) {
-      // 发生错误，显示错误（不退还金币）
       setState(() {
         _messages.add({
           'role': 'assistant',
@@ -193,7 +182,6 @@ class _AIAssistantScreenState extends State<AIAssistantScreen> {
       backgroundColor: const Color(0xFFF8F9FD),
       body: Column(
         children: [
-          // 顶部渐变导航栏
           Container(
             decoration: const BoxDecoration(
               gradient: LinearGradient(
@@ -274,7 +262,6 @@ class _AIAssistantScreenState extends State<AIAssistantScreen> {
               ),
             ),
           ),
-          // 消息列表
           Expanded(
             child: ListView.builder(
               controller: _scrollController,
@@ -291,7 +278,6 @@ class _AIAssistantScreenState extends State<AIAssistantScreen> {
               },
             ),
           ),
-          // 加载指示器
           if (_isLoading)
             Padding(
               padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
@@ -304,7 +290,7 @@ class _AIAssistantScreenState extends State<AIAssistantScreen> {
                       borderRadius: BorderRadius.circular(12),
                       boxShadow: [
                         BoxShadow(
-                          color: const Color(0xFF9D31FF).withOpacity(0.1),
+                          color: const Color(0xFF9D31FF).withValues(alpha: 0.1),
                           blurRadius: 8,
                           offset: const Offset(0, 2),
                         ),
@@ -343,7 +329,7 @@ class _AIAssistantScreenState extends State<AIAssistantScreen> {
               color: Colors.white,
               boxShadow: [
                 BoxShadow(
-                  color: Colors.grey.withOpacity(0.1),
+                  color: Colors.grey.withValues(alpha: 0.1),
                   blurRadius: 10,
                   offset: const Offset(0, -2),
                 ),
@@ -390,7 +376,7 @@ class _AIAssistantScreenState extends State<AIAssistantScreen> {
                           borderRadius: BorderRadius.circular(24),
                           boxShadow: [
                             BoxShadow(
-                              color: const Color(0xFF9D31FF).withOpacity(0.3),
+                              color: const Color(0xFF9D31FF).withValues(alpha: 0.3),
                               blurRadius: 8,
                               offset: const Offset(0, 2),
                             ),
@@ -459,8 +445,8 @@ class _AIAssistantScreenState extends State<AIAssistantScreen> {
                     boxShadow: [
                       BoxShadow(
                         color: isUser
-                            ? const Color(0xFF9D31FF).withOpacity(0.2)
-                            : Colors.grey.withOpacity(0.1),
+                            ? const Color(0xFF9D31FF).withValues(alpha: 0.2)
+                            : Colors.grey.withValues(alpha: 0.1),
                         blurRadius: 8,
                         offset: const Offset(0, 2),
                       ),

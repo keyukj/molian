@@ -1,6 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'dart:io';
+import 'package:app_tracking_transparency/app_tracking_transparency.dart';
 import 'splash_screen.dart';
 import 'login_screen.dart';
 import 'publish_post_screen.dart';
@@ -15,11 +16,34 @@ import 'molianIAP/molianStoreView.dart';
 import 'widgets/coin_icon.dart';
 
 void main() {
+  WidgetsFlutterBinding.ensureInitialized();
   runApp(const MolianApp());
 }
 
-class MolianApp extends StatelessWidget {
+class MolianApp extends StatefulWidget {
   const MolianApp({super.key});
+
+  @override
+  State<MolianApp> createState() => _MolianAppState();
+}
+
+class _MolianAppState extends State<MolianApp> {
+  @override
+  void initState() {
+    super.initState();
+    WidgetsBinding.instance.addPostFrameCallback((_) => _initTracking());
+  }
+
+  Future<void> _initTracking() async {
+    if (Platform.isIOS) {
+      try {
+        await Future.delayed(const Duration(seconds: 1));
+        await AppTrackingTransparency.requestTrackingAuthorization();
+      } catch (e) {
+        // ignore tracking errors
+      }
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -50,7 +74,6 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   int _currentIndex = 0;
-
   final List<Widget> _screens = [
     const FeedScreen(),
     const NotesScreen(),
@@ -90,7 +113,6 @@ class _MainScreenState extends State<MainScreen> {
   }
 }
 
-// 动态广场页面
 class FeedScreen extends StatefulWidget {
   const FeedScreen({super.key});
 
@@ -104,7 +126,6 @@ class _FeedScreenState extends State<FeedScreen> {
   @override
   void initState() {
     super.initState();
-    // 监听用户信息变化（包括拉黑列表变化）
     _userManager.addListener(_onUserInfoChanged);
   }
   
@@ -118,7 +139,6 @@ class _FeedScreenState extends State<FeedScreen> {
     setState(() {});
   }
   
-  // 动态列表数据
   final List<Map<String, dynamic>> _feedList = [
     {
       'id': '1',
@@ -350,7 +370,6 @@ class _FeedScreenState extends State<FeedScreen> {
       backgroundColor: const Color(0xFFF8F9FD),
       body: Column(
         children: [
-          // 顶部导航栏
           Container(
             decoration: BoxDecoration(
               color: Colors.white,
@@ -370,7 +389,7 @@ class _FeedScreenState extends State<FeedScreen> {
                         borderRadius: BorderRadius.circular(10),
                         boxShadow: [
                           BoxShadow(
-                            color: const Color(0xFF9D31FF).withOpacity(0.2),
+                            color: const Color(0xFF9D31FF).withValues(alpha: 0.2),
                             blurRadius: 8,
                             offset: const Offset(0, 2),
                           ),
@@ -416,11 +435,9 @@ class _FeedScreenState extends State<FeedScreen> {
               ),
             ),
           ),
-          // 动态列表
           Expanded(
             child: Builder(
               builder: (context) {
-                // 过滤掉被拉黑用户的动态
                 final filteredFeeds = _feedList
                     .where((feed) => !_userManager.isUserBlocked(feed['name'] as String))
                     .toList();
@@ -517,7 +534,6 @@ class _FeedScreenState extends State<FeedScreen> {
       comments: comments,
       isLiked: isLiked,
       onBlocked: () {
-        // 从列表中移除被屏蔽的动态
         setState(() {
           _feedList.removeAt(feedIndex);
         });
@@ -563,9 +579,7 @@ class _FeedScreenState extends State<FeedScreen> {
                     '确定要拉黑「$userName」吗？\n拉黑后将不再看到TA的任何内容',
                     '已拉黑该用户',
                     onConfirm: () {
-                      // 执行拉黑操作
-                      final userManager = UserManager();
-                      userManager.blockUser(userName);
+                      UserManager().blockUser(userName);
                     },
                   );
                 },
@@ -594,7 +608,6 @@ class _FeedScreenState extends State<FeedScreen> {
                 color: Colors.grey[700]!,
                 onTap: () {
                   Navigator.pop(context);
-                  // 从列表中移除被屏蔽的动态
                   setState(() {
                     _feedList.removeAt(feedIndex);
                   });
@@ -636,7 +649,7 @@ class _FeedScreenState extends State<FeedScreen> {
                 width: 44,
                 height: 44,
                 decoration: BoxDecoration(
-                  color: color.withOpacity(0.1),
+                  color: color.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(12),
                 ),
                 child: Icon(icon, color: color, size: 22),
@@ -701,7 +714,7 @@ class _FeedScreenState extends State<FeedScreen> {
           TextButton(
             onPressed: () {
               Navigator.pop(context);
-              onConfirm?.call(); // 执行回调
+              onConfirm?.call();
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
                   content: Text(successMessage),
@@ -722,7 +735,6 @@ class _FeedScreenState extends State<FeedScreen> {
   }
 }
 
-// 时光笔记页面
 class NotesScreen extends StatefulWidget {
   const NotesScreen({super.key});
 
@@ -731,7 +743,6 @@ class NotesScreen extends StatefulWidget {
 }
 
 class _NotesScreenState extends State<NotesScreen> {
-  // 笔记列表数据
   final List<Map<String, dynamic>> _notesList = [
     {
       'id': 'note1',
@@ -794,7 +805,6 @@ class _NotesScreenState extends State<NotesScreen> {
       backgroundColor: const Color(0xFFF8F9FD),
       body: Column(
         children: [
-          // 顶部渐变导航栏
           Container(
             decoration: const BoxDecoration(
               gradient: LinearGradient(
@@ -824,7 +834,7 @@ class _NotesScreenState extends State<NotesScreen> {
                         Text(
                           '记录每一个珍贵时刻',
                           style: TextStyle(
-                            color: Colors.white.withOpacity(0.8),
+                            color: Colors.white.withValues(alpha: 0.8),
                             fontSize: 14,
                           ),
                         ),
@@ -834,7 +844,7 @@ class _NotesScreenState extends State<NotesScreen> {
                       width: 40,
                       height: 40,
                       decoration: BoxDecoration(
-                        color: Colors.white.withOpacity(0.2),
+                        color: Colors.white.withValues(alpha: 0.2),
                         borderRadius: BorderRadius.circular(20),
                       ),
                       child: IconButton(
@@ -853,7 +863,6 @@ class _NotesScreenState extends State<NotesScreen> {
               ),
             ),
           ),
-          // 笔记列表 - 时间轴样式
           Expanded(
             child: ListView.builder(
               padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
@@ -897,7 +906,6 @@ class _NotesScreenState extends State<NotesScreen> {
       child: Row(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
-          // 左侧时间轴 - 减小宽度
           SizedBox(
             width: 40,
             child: Column(
@@ -923,10 +931,8 @@ class _NotesScreenState extends State<NotesScreen> {
             ),
           ),
           const SizedBox(width: 10),
-          // 时间轴线和圆点
           Column(
             children: [
-              // 上方线条
               if (!isFirst)
                 Container(
                   width: 2,
@@ -936,13 +942,12 @@ class _NotesScreenState extends State<NotesScreen> {
                       begin: Alignment.topCenter,
                       end: Alignment.bottomCenter,
                       colors: [
-                        const Color(0xFF9D31FF).withOpacity(0.3),
-                        const Color(0xFF9D31FF).withOpacity(0.5),
+                        const Color(0xFF9D31FF).withValues(alpha: 0.3),
+                        const Color(0xFF9D31FF).withValues(alpha: 0.5),
                       ],
                     ),
                   ),
                 ),
-              // 圆点
               Container(
                 width: 10,
                 height: 10,
@@ -957,7 +962,7 @@ class _NotesScreenState extends State<NotesScreen> {
                   ),
                   boxShadow: [
                     BoxShadow(
-                      color: const Color(0xFF9D31FF).withOpacity(0.3),
+                      color: const Color(0xFF9D31FF).withValues(alpha: 0.3),
                       blurRadius: 6,
                       offset: const Offset(0, 2),
                     ),
@@ -974,8 +979,8 @@ class _NotesScreenState extends State<NotesScreen> {
                       begin: Alignment.topCenter,
                       end: Alignment.bottomCenter,
                       colors: [
-                        const Color(0xFF9D31FF).withOpacity(0.5),
-                        const Color(0xFF9D31FF).withOpacity(0.2),
+                        const Color(0xFF9D31FF).withValues(alpha: 0.5),
+                        const Color(0xFF9D31FF).withValues(alpha: 0.2),
                       ],
                     ),
                   ),
@@ -983,7 +988,6 @@ class _NotesScreenState extends State<NotesScreen> {
             ],
           ),
           const SizedBox(width: 10),
-          // 右侧笔记内容 - 扩大占比
           Expanded(
             child: GestureDetector(
               onTap: () {
@@ -1007,7 +1011,7 @@ class _NotesScreenState extends State<NotesScreen> {
                   borderRadius: BorderRadius.circular(16),
                   boxShadow: [
                     BoxShadow(
-                      color: const Color(0xFF9D31FF).withOpacity(0.08),
+                      color: const Color(0xFF9D31FF).withValues(alpha: 0.08),
                       blurRadius: 12,
                       offset: const Offset(0, 4),
                     ),
@@ -1016,7 +1020,6 @@ class _NotesScreenState extends State<NotesScreen> {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    // 标题和删除按钮
                     Padding(
                       padding: const EdgeInsets.all(16),
                       child: Row(
@@ -1066,7 +1069,6 @@ class _NotesScreenState extends State<NotesScreen> {
                         ],
                       ),
                     ),
-                    // 正文
                     Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 16),
                       child: Text(
@@ -1078,7 +1080,6 @@ class _NotesScreenState extends State<NotesScreen> {
                         ),
                       ),
                     ),
-                    // 图片
                     if (images.isNotEmpty) ...[
                       const SizedBox(height: 12),
                       Padding(
@@ -1176,7 +1177,6 @@ class _NotesScreenState extends State<NotesScreen> {
           TextButton(
             onPressed: () {
               Navigator.pop(context);
-              // 从列表中删除笔记
               setState(() {
                 _notesList.removeAt(noteIndex);
               });
@@ -1202,7 +1202,6 @@ class _NotesScreenState extends State<NotesScreen> {
   }
 }
 
-// 个人中心页面
 class ProfileScreen extends StatefulWidget {
   const ProfileScreen({super.key});
 
@@ -1216,7 +1215,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
   @override
   void initState() {
     super.initState();
-    // 监听用户信息变化
     _userManager.addListener(_onUserInfoChanged);
   }
   
@@ -1230,7 +1228,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
     setState(() {});
   }
   
-  // 我的最近动态列表
   final List<Map<String, dynamic>> _myRecentFeeds = [
     {
       'id': 'my1',
@@ -1296,7 +1293,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
       backgroundColor: const Color(0xFFFAFBFF),
       body: CustomScrollView(
         slivers: [
-          // 顶部区域
           SliverAppBar(
             expandedHeight: 80,
             pinned: false,
@@ -1310,7 +1306,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     end: Alignment.bottomCenter,
                     colors: [
                       Colors.white,
-                      const Color(0xFFF8F9FD).withOpacity(0.3),
+                      const Color(0xFFF8F9FD).withValues(alpha: 0.3),
                     ],
                   ),
                 ),
@@ -1320,14 +1316,13 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        // 钱包按钮
                         GestureDetector(
                           onTap: () async {
                             await Navigator.push(
                               context,
                               MaterialPageRoute(builder: (context) => const MolianStoreView()),
                             );
-                            setState(() {}); // 触发重建
+                            setState(() {});
                           },
                           child: Container(
                             padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
@@ -1357,21 +1352,19 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           ),
                         ),
                         const SizedBox(width: 12),
-                        // 设置按钮
                         GestureDetector(
                           onTap: () async {
                             final result = await Navigator.push(
                               context,
                               MaterialPageRoute(builder: (context) => const SettingsScreen()),
                             );
-                            // 如果有返回数据，更新个人信息
                             if (result != null && mounted) {
                               _userManager.updateUserInfo(
                                 nickname: result['nickname'],
                                 signature: result['signature'],
                                 avatarPath: result['avatarPath'],
                               );
-                              setState(() {}); // 触发重建
+                              setState(() {});
                             }
                           },
                           child: Container(
@@ -1399,7 +1392,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ),
             ),
           ),
-          // 用户信息卡片
           SliverToBoxAdapter(
             child: Padding(
               padding: const EdgeInsets.only(top: 8),
@@ -1412,7 +1404,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       borderRadius: BorderRadius.circular(24),
                       boxShadow: [
                         BoxShadow(
-                          color: const Color(0xFF9D31FF).withOpacity(0.08),
+                          color: const Color(0xFF9D31FF).withValues(alpha: 0.08),
                           blurRadius: 20,
                           offset: const Offset(0, 8),
                         ),
@@ -1420,12 +1412,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ),
                     child: Column(
                       children: [
-                        // 用户信息 - 左右布局
                         Padding(
                           padding: const EdgeInsets.all(20),
                           child: Row(
                             children: [
-                              // 头像
                               Container(
                                 width: 80,
                                 height: 80,
@@ -1436,7 +1426,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                   ),
                                   boxShadow: [
                                     BoxShadow(
-                                      color: const Color(0xFF9D31FF).withOpacity(0.3),
+                                      color: const Color(0xFF9D31FF).withValues(alpha: 0.3),
                                       blurRadius: 12,
                                       offset: const Offset(0, 4),
                                     ),
@@ -1456,7 +1446,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                                 ),
                               ),
                               const SizedBox(width: 16),
-                              // 昵称和签名
                               Expanded(
                                 child: Column(
                                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -1484,7 +1473,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             ],
                           ),
                         ),
-                        // 分隔线
                         Container(
                           height: 1,
                           margin: const EdgeInsets.symmetric(horizontal: 20),
@@ -1498,7 +1486,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                             ),
                           ),
                         ),
-                        // 数据统计 - 左右布局
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
                           child: Row(
@@ -1543,7 +1530,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                     ),
                   ),
                   const SizedBox(height: 16),
-                  // 最近动态 - 参考动态页面布局
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 20),
                     child: Column(
@@ -1558,7 +1544,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
                           ),
                         ),
                         const SizedBox(height: 12),
-                        // 动态卡片列表
                         ..._myRecentFeeds.asMap().entries.map((entry) {
                           final index = entry.key;
                           final feed = entry.value;
@@ -1642,7 +1627,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
           ),
         );
         
-        // 如果返回了删除标记，从列表中移除该动态
         if (result != null && result['deleted'] == true && mounted) {
           setState(() {
             _myRecentFeeds.removeAt(feedIndex);
@@ -1655,7 +1639,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           borderRadius: BorderRadius.circular(12),
           boxShadow: [
             BoxShadow(
-              color: const Color(0xFF9D31FF).withOpacity(0.08),
+              color: const Color(0xFF9D31FF).withValues(alpha: 0.08),
               blurRadius: 8,
               offset: const Offset(0, 2),
             ),
@@ -1665,7 +1649,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // 时间
             Text(
               time,
               style: TextStyle(
@@ -1674,7 +1657,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ),
           ),
           const SizedBox(height: 12),
-          // 内容
           Text(
             content,
             style: const TextStyle(
@@ -1684,10 +1666,8 @@ class _ProfileScreenState extends State<ProfileScreen> {
             ),
           ),
           const SizedBox(height: 12),
-          // 图片网格
           _buildImageGrid(images),
           const SizedBox(height: 12),
-          // 互动区
           Container(
             padding: const EdgeInsets.only(top: 12),
             decoration: BoxDecoration(
@@ -1830,7 +1810,6 @@ class _ProfileScreenState extends State<ProfileScreen> {
           TextButton(
             onPressed: () {
               Navigator.pop(context);
-              // 删除动态
               setState(() {
                 _myRecentFeeds.removeAt(feedIndex);
               });
@@ -2012,7 +1991,7 @@ class _FeedCardState extends State<_FeedCard> with SingleTickerProviderStateMixi
           borderRadius: BorderRadius.circular(12),
           boxShadow: [
             BoxShadow(
-              color: const Color(0xFF9D31FF).withOpacity(0.08),
+              color: const Color(0xFF9D31FF).withValues(alpha: 0.08),
               blurRadius: 8,
               offset: const Offset(0, 2),
             ),
