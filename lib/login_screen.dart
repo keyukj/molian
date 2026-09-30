@@ -74,7 +74,7 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
           borderRadius: BorderRadius.circular(16),
         ),
         title: const Text(
-          '温馨提示',
+          '提示',
           style: TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: 18,
@@ -125,7 +125,7 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
                   },
                   style: TextButton.styleFrom(
                     padding: const EdgeInsets.symmetric(vertical: 12),
-                    backgroundColor: const Color(0xFF9D31FF),
+                    backgroundColor: const Color(0xFFC94A5A),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8),
                     ),
@@ -178,7 +178,7 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
               onPressed: () => Navigator.pop(context),
               style: TextButton.styleFrom(
                 padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
-                backgroundColor: const Color(0xFF9D31FF),
+                backgroundColor: const Color(0xFFC94A5A),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8),
                 ),
@@ -207,8 +207,8 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
             end: Alignment.bottomCenter,
             colors: [
               Colors.white,
-              const Color(0xFFF8F9FD).withValues(alpha: 0.5),
-              const Color(0xFFF8F9FD),
+              const Color(0xFFF5F3F1).withValues(alpha: 0.5),
+              const Color(0xFFF5F3F1),
             ],
           ),
         ),
@@ -226,35 +226,23 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
                   
                   const SizedBox(height: 32),
                   
-                  // App 名称
-                  ShaderMask(
-                    shaderCallback: (bounds) => const LinearGradient(
-                      colors: [
-                        Color(0xFF9D31FF),
-                        Color(0xFFF260FF),
-                        Color(0xFFFF609F),
-                      ],
-                    ).createShader(bounds),
-                    child: const Text(
-                      '探友',
-                      style: TextStyle(
-                        fontSize: 32,
-                        fontWeight: FontWeight.bold,
-                        color: Colors.white,
-                        letterSpacing: 4,
-                      ),
+                  const Text(
+                    '探友',
+                    style: TextStyle(
+                      fontSize: 32,
+                      fontWeight: FontWeight.w700,
+                      color: Color(0xFFC94A5A),
+                      letterSpacing: 2,
                     ),
                   ),
                   
                   const SizedBox(height: 12),
                   
-                  // 宣传语
                   Text(
-                    '记录生活的美好瞬间',
+                    '认识有意思的人',
                     style: TextStyle(
                       fontSize: 15,
                       color: Colors.grey[600],
-                      letterSpacing: 1.5,
                     ),
                   ),
                   
@@ -303,9 +291,8 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
                           text: '立即登录',
                           gradient: const LinearGradient(
                             colors: [
-                              Color(0xFF9D31FF),
-                              Color(0xFFF260FF),
-                              Color(0xFFFF609F),
+                              Color(0xFFC94A5A),
+                              Color(0xFFE07A6A),
                             ],
                           ),
                           textColor: Colors.white,
@@ -360,7 +347,7 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
                                 '立即注册',
                                 style: TextStyle(
                                   fontSize: 14,
-                                  color: Color(0xFF9D31FF),
+                                  color: Color(0xFFC94A5A),
                                   fontWeight: FontWeight.w600,
                                 ),
                               ),
@@ -389,9 +376,9 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
                                   height: 18,
                                   margin: const EdgeInsets.only(top: 2, right: 6),
                                   decoration: BoxDecoration(
-                                    color: _isAgreed ? const Color(0xFF9D31FF) : Colors.white,
+                                    color: _isAgreed ? const Color(0xFFC94A5A) : Colors.white,
                                     border: Border.all(
-                                      color: _isAgreed ? const Color(0xFF9D31FF) : Colors.grey[400]!,
+                                      color: _isAgreed ? const Color(0xFFC94A5A) : Colors.grey[400]!,
                                       width: 1.5,
                                     ),
                                     borderRadius: BorderRadius.circular(4),
@@ -420,7 +407,7 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
                                       TextSpan(
                                         text: '隐私协议',
                                         style: const TextStyle(
-                                          color: Color(0xFF9D31FF),
+                                          color: Color(0xFFC94A5A),
                                           fontWeight: FontWeight.w500,
                                         ),
                                         recognizer: TapGestureRecognizer()
@@ -430,7 +417,7 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
                                       TextSpan(
                                         text: '用户协议',
                                         style: const TextStyle(
-                                          color: Color(0xFF9D31FF),
+                                          color: Color(0xFFC94A5A),
                                           fontWeight: FontWeight.w500,
                                         ),
                                         recognizer: TapGestureRecognizer()
@@ -465,7 +452,7 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
         borderRadius: BorderRadius.circular(28),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFF9D31FF).withValues(alpha: 0.25),
+            color: const Color(0xFFC94A5A).withValues(alpha: 0.25),
             blurRadius: 20,
             offset: const Offset(0, 8),
           ),
@@ -516,7 +503,7 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
           ),
           prefixIcon: Icon(
             icon,
-            color: const Color(0xFF9D31FF),
+            color: const Color(0xFFC94A5A),
             size: 22,
           ),
           suffixIcon: isPassword
@@ -559,7 +546,7 @@ class _LoginScreenState extends State<LoginScreen> with SingleTickerProviderStat
         boxShadow: gradient != null
             ? [
                 BoxShadow(
-                  color: const Color(0xFF9D31FF).withValues(alpha: 0.3),
+                  color: const Color(0xFFC94A5A).withValues(alpha: 0.3),
                   blurRadius: 12,
                   offset: const Offset(0, 4),
                 ),

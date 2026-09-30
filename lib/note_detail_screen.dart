@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'widgets/app_image.dart';
 
 class NoteDetailScreen extends StatelessWidget {
   final String time;
@@ -21,7 +22,7 @@ class NoteDetailScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF8F9FD),
+      backgroundColor: const Color(0xFFF5F3F1),
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
@@ -62,7 +63,7 @@ class NoteDetailScreen extends StatelessWidget {
                         padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
                         decoration: BoxDecoration(
                           gradient: const LinearGradient(
-                            colors: [Color(0xFF9D31FF), Color(0xFFF260FF)],
+                            colors: [Color(0xFFC94A5A), Color(0xFFE07A6A)],
                           ),
                           borderRadius: BorderRadius.circular(20),
                         ),
@@ -159,7 +160,7 @@ class NoteDetailScreen extends StatelessWidget {
     if (images.length == 1) {
       return ClipRRect(
         borderRadius: BorderRadius.circular(12),
-        child: Image.network(
+        child: AppImage(
           images[0],
           width: double.infinity,
           fit: BoxFit.cover,
@@ -175,7 +176,7 @@ class NoteDetailScreen extends StatelessWidget {
                     ),
                     child: ClipRRect(
                       borderRadius: BorderRadius.circular(12),
-                      child: Image.network(
+                      child: AppImage(
                         url,
                         height: 180,
                         fit: BoxFit.cover,
@@ -199,7 +200,7 @@ class NoteDetailScreen extends StatelessWidget {
         itemBuilder: (context, index) {
           return ClipRRect(
             borderRadius: BorderRadius.circular(12),
-            child: Image.network(
+            child: AppImage(
               images[index],
               fit: BoxFit.cover,
             ),
@@ -239,7 +240,7 @@ class NoteDetailScreen extends StatelessWidget {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
                   content: const Text('笔记已删除'),
-                  backgroundColor: const Color(0xFF9D31FF),
+                  backgroundColor: const Color(0xFFC94A5A),
                   behavior: SnackBarBehavior.floating,
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                 ),

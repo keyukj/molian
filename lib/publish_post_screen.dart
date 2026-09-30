@@ -37,7 +37,7 @@ class _PublishPostScreenState extends State<PublishPostScreen> with SingleTicker
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFFAFBFF),
+      backgroundColor: const Color(0xFFFAF8F6),
       body: Column(
         children: [
           _buildAppBar(),
@@ -88,7 +88,7 @@ class _PublishPostScreenState extends State<PublishPostScreen> with SingleTicker
                   width: 40,
                   height: 40,
                   decoration: BoxDecoration(
-                    color: const Color(0xFFF8F9FD),
+                    color: const Color(0xFFF5F3F1),
                     borderRadius: BorderRadius.circular(12),
                   ),
                   child: const Icon(Icons.close, color: Colors.black87, size: 22),
@@ -109,7 +109,7 @@ class _PublishPostScreenState extends State<PublishPostScreen> with SingleTicker
                   decoration: BoxDecoration(
                     gradient: _canPublish
                         ? const LinearGradient(
-                            colors: [Color(0xFF9D31FF), Color(0xFFF260FF), Color(0xFFFF609F)],
+                            colors: [Color(0xFFC94A5A), Color(0xFFE07A6A), Color(0xFFEBA89A)],
                           )
                         : null,
                     color: _canPublish ? null : Colors.grey[300],
@@ -117,7 +117,7 @@ class _PublishPostScreenState extends State<PublishPostScreen> with SingleTicker
                     boxShadow: _canPublish
                         ? [
                             BoxShadow(
-                              color: const Color(0xFF9D31FF).withValues(alpha: 0.3),
+                              color: const Color(0xFFC94A5A).withValues(alpha: 0.3),
                               blurRadius: 8,
                               offset: const Offset(0, 2),
                             ),
@@ -150,7 +150,7 @@ class _PublishPostScreenState extends State<PublishPostScreen> with SingleTicker
         border: Border.all(color: Colors.grey[200]!),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFF9D31FF).withValues(alpha: 0.04),
+            color: const Color(0xFFC94A5A).withValues(alpha: 0.04),
             blurRadius: 12,
             offset: const Offset(0, 4),
           ),
@@ -225,7 +225,7 @@ class _PublishPostScreenState extends State<PublishPostScreen> with SingleTicker
               padding: const EdgeInsets.all(8),
               decoration: BoxDecoration(
                 gradient: const LinearGradient(
-                  colors: [Color(0xFF9D31FF), Color(0xFFF260FF)],
+                  colors: [Color(0xFFC94A5A), Color(0xFFE07A6A)],
                 ),
                 borderRadius: BorderRadius.circular(10),
               ),
@@ -274,7 +274,7 @@ class _PublishPostScreenState extends State<PublishPostScreen> with SingleTicker
             color: Colors.grey[100],
             boxShadow: [
               BoxShadow(
-                color: const Color(0xFF9D31FF).withValues(alpha: 0.08),
+                color: const Color(0xFFC94A5A).withValues(alpha: 0.08),
                 blurRadius: 8,
                 offset: const Offset(0, 2),
               ),
@@ -346,7 +346,7 @@ class _PublishPostScreenState extends State<PublishPostScreen> with SingleTicker
               width: 40,
               height: 40,
               decoration: BoxDecoration(
-                color: const Color(0xFFF8F9FD),
+                color: const Color(0xFFF5F3F1),
                 borderRadius: BorderRadius.circular(12),
               ),
               child: Icon(Icons.add_photo_alternate_outlined, size: 22, color: Colors.grey[600]),
@@ -386,7 +386,7 @@ class _PublishPostScreenState extends State<PublishPostScreen> with SingleTicker
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 content: const Text('最多只能添加9张图片'),
-                backgroundColor: const Color(0xFF9D31FF),
+                backgroundColor: const Color(0xFFC94A5A),
                 behavior: SnackBarBehavior.floating,
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
               ),
@@ -418,7 +418,7 @@ class _PublishPostScreenState extends State<PublishPostScreen> with SingleTicker
             Text('发布成功！'),
           ],
         ),
-        backgroundColor: const Color(0xFF9D31FF),
+        backgroundColor: const Color(0xFFC94A5A),
         behavior: SnackBarBehavior.floating,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       ),

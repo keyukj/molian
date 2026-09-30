@@ -1,5 +1,5 @@
-
 import 'package:flutter/material.dart';
+import 'widgets/app_image.dart';
 import 'dart:io';
 import 'package:app_tracking_transparency/app_tracking_transparency.dart';
 import 'splash_screen.dart';
@@ -11,6 +11,7 @@ import 'post_detail_screen.dart';
 import 'note_detail_screen.dart';
 import 'user_profile_screen.dart';
 import 'ai_assistant_screen.dart';
+import 'home_screen.dart';
 import 'user_manager.dart';
 import 'molianIAP/molianStoreView.dart';
 import 'widgets/coin_icon.dart';
@@ -51,8 +52,8 @@ class _MolianAppState extends State<MolianApp> {
       title: '探友',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        primaryColor: const Color(0xFF9D31FF),
-        scaffoldBackgroundColor: const Color(0xFFF8F9FD),
+        primaryColor: const Color(0xFFC94A5A),
+        scaffoldBackgroundColor: const Color(0xFFF5F3F1),
         fontFamily: 'SF Pro Display',
       ),
       initialRoute: '/',
@@ -74,40 +75,63 @@ class MainScreen extends StatefulWidget {
 
 class _MainScreenState extends State<MainScreen> {
   int _currentIndex = 0;
-  final List<Widget> _screens = [
-    const FeedScreen(),
-    const NotesScreen(),
-    const AIAssistantScreen(),
-    const ProfileScreen(),
-  ];
+
+  Widget _pageAt(int index) {
+    switch (index) {
+      case 1:
+        return const FeedScreen();
+      case 2:
+        return const NotesScreen();
+      case 3:
+        return const ProfileScreen();
+      case 0:
+      default:
+        return const HomeScreen();
+    }
+  }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      body: _screens[_currentIndex],
-      bottomNavigationBar: BottomNavigationBar(
-        currentIndex: _currentIndex,
-        onTap: (index) => setState(() => _currentIndex = index),
-        selectedItemColor: const Color(0xFF9D31FF),
-        unselectedItemColor: Colors.grey,
-        items: const [
-          BottomNavigationBarItem(
-            icon: Icon(Icons.home),
-            label: '动态',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.book),
-            label: '笔记',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.smart_toy),
-            label: 'AI助手',
-          ),
-          BottomNavigationBarItem(
-            icon: Icon(Icons.person),
-            label: '我的',
-          ),
-        ],
+      body: _pageAt(_currentIndex),
+      bottomNavigationBar: Container(
+        decoration: BoxDecoration(
+          color: Colors.white,
+          border: Border(top: BorderSide(color: Colors.grey[200]!, width: 0.5)),
+        ),
+        child: BottomNavigationBar(
+          currentIndex: _currentIndex,
+          onTap: (index) => setState(() => _currentIndex = index),
+          selectedItemColor: const Color(0xFFE85A7A),
+          unselectedItemColor: const Color(0xFF9A9A9A),
+          backgroundColor: Colors.white,
+          elevation: 0,
+          type: BottomNavigationBarType.fixed,
+          selectedFontSize: 11,
+          unselectedFontSize: 11,
+          items: const [
+            BottomNavigationBarItem(
+              icon: Icon(Icons.home_outlined),
+              activeIcon: Icon(Icons.home_rounded),
+              label: '首页',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.explore_outlined),
+              activeIcon: Icon(Icons.explore),
+              label: '发现',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.access_time),
+              activeIcon: Icon(Icons.watch_later),
+              label: '时光',
+            ),
+            BottomNavigationBarItem(
+              icon: Icon(Icons.person_outline),
+              activeIcon: Icon(Icons.person),
+              label: '我的',
+            ),
+          ],
+        ),
       ),
     );
   }
@@ -122,62 +146,58 @@ class FeedScreen extends StatefulWidget {
 
 class _FeedScreenState extends State<FeedScreen> {
   final UserManager _userManager = UserManager();
-  
+  String _topic = '全部';
+
   @override
   void initState() {
     super.initState();
     _userManager.addListener(_onUserInfoChanged);
   }
-  
+
   @override
   void dispose() {
     _userManager.removeListener(_onUserInfoChanged);
     super.dispose();
   }
-  
+
   void _onUserInfoChanged() {
     setState(() {});
   }
-  
+
   final List<Map<String, dynamic>> _feedList = [
     {
       'id': '1',
       'avatar': 'assets/images/suxiaonuan.jpg',
       'name': '苏小暖',
-      'time': '5分钟前',
-      'content': '早起看到窗外下雨了☔️ 突然很想喝一碗热乎乎的馄饨，于是出门找了家老店，果然没让我失望！',
-      'images': [
-        'https://picsum.photos/seed/food1/400/400',
-        'https://picsum.photos/seed/food2/400/400',
-      ],
-      'likes': 23,
-      'comments': 4,
+      'time': '刚刚',
+      'topic': '美食',
+      'content': '下雨天适合吃馄饨。地铁口那家老店还在，老板还记得我要多放葱。',
+      'images': ['assets/feed/wonton.jpg', 'assets/feed/wonton2.jpg', 'assets/feed/rain.jpg'],
+      'likes': 6,
+      'comments': 1,
       'isLiked': false,
     },
     {
       'id': '2',
       'avatar': 'assets/images/ajie.jpg',
       'name': '阿杰',
-      'time': '15分钟前',
-      'content': '周末去爬山啦🏔️ 虽然累到腿软，但站在山顶看到云海的那一刻，觉得一切都值得了！大自然真的太治愈了',
-      'images': [
-        'https://picsum.photos/seed/mountain1/400/400',
-        'https://picsum.photos/seed/mountain2/400/400',
-      ],
-      'likes': 28,
-      'comments': 5,
+      'time': '12分钟前',
+      'topic': '出行',
+      'content': '爬了半天，腿已经不是自己的了。山顶风大，拍了两张就下来了。',
+      'images': ['assets/feed/hike1.jpg', 'assets/feed/hike2.jpg'],
+      'likes': 31,
+      'comments': 8,
       'isLiked': true,
     },
     {
       'id': '3',
       'avatar': 'assets/images/linxiaoxi.jpg',
       'name': '林小溪',
-      'time': '30分钟前',
-      'content': '终于把这个月的工作报告搞定了！奖励自己一杯奶茶🧋 最近加班太多了，要好好休息一下',
-      'images': [
-        'https://picsum.photos/seed/drink1/400/400',
-      ],
-      'likes': 15,
+      'time': '40分钟前',
+      'topic': '美食',
+      'content': '报告终于交了。奶茶店排队排到怀疑人生，杯壁还写错名字。',
+      'images': ['assets/feed/milktea.jpg', 'assets/feed/milktea2.jpg'],
+      'likes': 9,
       'comments': 2,
       'isLiked': false,
     },
@@ -186,325 +206,327 @@ class _FeedScreenState extends State<FeedScreen> {
       'avatar': 'assets/images/zhangchen.jpg',
       'name': '张晨',
       'time': '1小时前',
-      'content': '今天天气太好了！约了几个朋友去公园打羽毛球，出了一身汗，感觉整个人都轻松了😊',
-      'images': [
-        'https://picsum.photos/seed/sport1/400/400',
-      ],
-      'likes': 19,
+      'topic': '运动',
+      'content': '下午打羽毛球，对手太猛，我输得挺干脆。下次换双打。',
+      'images': ['assets/feed/badminton.jpg'],
+      'likes': 14,
       'comments': 3,
-      'isLiked': true,
+      'isLiked': false,
     },
     {
       'id': '5',
       'avatar': 'assets/images/xiamo.jpg',
       'name': '夏末',
       'time': '2小时前',
-      'content': '周末在家学做手工，第一次尝试折纸鹤，虽然有点丑但是很有成就感哈哈哈🦢',
-      'images': [
-        'https://picsum.photos/seed/craft1/400/400',
-        'https://picsum.photos/seed/craft2/400/400',
-        'https://picsum.photos/seed/craft3/400/400',
-      ],
-      'likes': 26,
-      'comments': 5,
+      'topic': '日常',
+      'content': '折了只纸鹤，翅膀歪的。放桌上还挺好看。',
+      'images': ['assets/feed/origami.jpg', 'assets/feed/desk.jpg'],
+      'likes': 4,
+      'comments': 0,
       'isLiked': false,
     },
     {
       'id': '6',
       'avatar': 'assets/images/wanghaoran.jpg',
       'name': '王浩然',
-      'time': '3小时前',
-      'content': '下班路上偶遇超美的晚霞🌅 赶紧拍下来分享给大家！这个城市真的很美',
-      'images': [
-        'https://picsum.photos/seed/sunset1/400/400',
-      ],
-      'likes': 30,
-      'comments': 5,
+      'time': '昨天 19:08',
+      'topic': '出行',
+      'content': '下班路过天桥，晚霞把楼玻璃染成橘色。站了一会儿才想起来拍照。',
+      'images': ['assets/feed/sunset.jpg'],
+      'likes': 52,
+      'comments': 11,
       'isLiked': true,
     },
     {
       'id': '7',
       'avatar': 'assets/images/default_avatar.jpg',
       'name': '陈思思',
-      'time': '4小时前',
-      'content': '图书馆学习ing📚 准备下个月的考试，加油加油！顺便拍了张照片记录一下',
-      'images': [
-        'https://picsum.photos/seed/study1/400/400',
-        'https://picsum.photos/seed/study2/400/400',
-      ],
-      'likes': 22,
-      'comments': 4,
+      'time': '昨天',
+      'topic': '学习',
+      'content': '图书馆座位被占了，换到角落将就。耳机放白噪音，效率意外还行。',
+      'images': ['assets/feed/library.jpg', 'assets/feed/library2.jpg'],
+      'likes': 7,
+      'comments': 1,
       'isLiked': false,
     },
     {
       'id': '8',
       'avatar': 'assets/images/limingxuan.jpg',
       'name': '李明轩',
-      'time': '5小时前',
-      'content': '今天心情不太好，去海边走了走，看着海浪一波一波的，突然觉得什么烦恼都不算什么了🌊',
-      'images': [
-        'https://picsum.photos/seed/sea1/400/400',
-        'https://picsum.photos/seed/sea2/400/400',
-      ],
-      'likes': 27,
-      'comments': 5,
+      'time': '昨天',
+      'topic': '出行',
+      'content': '情绪不太对，去江边转了两圈。风挺大，帽子差点吹跑。',
+      'images': ['assets/feed/river1.jpg', 'assets/feed/river2.jpg'],
+      'likes': 18,
+      'comments': 4,
       'isLiked': true,
     },
     {
       'id': '9',
       'avatar': 'assets/images/zhouxiaomi.jpg',
       'name': '周小米',
-      'time': '6小时前',
-      'content': '周末在家做烘焙🍰 第一次尝试做蛋糕，虽然卖相不太好但味道还不错！下次继续努力',
-      'images': [
-        'https://picsum.photos/seed/cake1/400/400',
-        'https://picsum.photos/seed/cake2/400/400',
-      ],
-      'likes': 20,
-      'comments': 4,
+      'time': '2天前',
+      'topic': '美食',
+      'content': '烤箱第二次用，蛋糕塌了一半。室友说味道可以，我自己觉得偏甜。',
+      'images': ['assets/feed/cake.jpg', 'assets/feed/cake2.jpg'],
+      'likes': 22,
+      'comments': 6,
       'isLiked': false,
     },
     {
       'id': '10',
       'avatar': 'assets/images/default_avatar.jpg',
       'name': '刘宇航',
-      'time': '7小时前',
-      'content': '周末在家研究新菜谱，做了一桌子菜请朋友们来吃饭🍜 大家都说好吃，太有成就感了！',
-      'images': [
-        'https://picsum.photos/seed/cooking1/400/400',
-        'https://picsum.photos/seed/cooking2/400/400',
-      ],
-      'likes': 29,
-      'comments': 5,
-      'isLiked': true,
-    },
-    {
-      'id': '11',
-      'avatar': 'assets/images/default_avatar.jpg',
-      'name': '许梦瑶',
-      'time': '8小时前',
-      'content': '早上被闹钟吵醒，发现外面在下雪❄️ 立刻爬起来冲到阳台，好久没见过这么大的雪了！堆个雪人去～',
-      'images': [
-        'https://picsum.photos/seed/snow1/400/400',
-        'https://picsum.photos/seed/snow2/400/400',
-      ],
-      'likes': 24,
-      'comments': 4,
-      'isLiked': false,
-    },
-    {
-      'id': '12',
-      'avatar': 'assets/images/default_avatar.jpg',
-      'name': '赵子龙',
-      'time': '9小时前',
-      'content': '加班到深夜终于完成了这个项目的最后一个模块💻 虽然累但是看到代码跑通的那一刻，所有辛苦都值得了！',
-      'images': [
-        'https://picsum.photos/seed/work1/400/400',
-      ],
-      'likes': 21,
-      'comments': 3,
-      'isLiked': true,
-    },
-    {
-      'id': '13',
-      'avatar': 'assets/images/yangxiaotong.jpg',
-      'name': '杨晓彤',
-      'time': '10小时前',
-      'content': '今天去参加了朋友的婚礼💐 看着她穿着婚纱的样子真的好美，祝福她们永远幸福！顺便吃到了超好吃的婚宴',
-      'images': [
-        'https://picsum.photos/seed/wedding1/400/400',
-        'https://picsum.photos/seed/wedding2/400/400',
-        'https://picsum.photos/seed/wedding3/400/400',
-      ],
-      'likes': 30,
-      'comments': 5,
-      'isLiked': true,
-    },
-    {
-      'id': '14',
-      'avatar': 'assets/images/default_avatar.jpg',
-      'name': '吴昊天',
-      'time': '11小时前',
-      'content': '终于拿到驾照啦🚗 从科一到科四一路过关，感谢教练的耐心指导！周末就可以开车带家人出去玩了',
-      'images': [
-        'https://picsum.photos/seed/car1/400/400',
-        'https://picsum.photos/seed/car2/400/400',
-      ],
-      'likes': 27,
-      'comments': 5,
-      'isLiked': false,
-    },
-    {
-      'id': '15',
-      'avatar': 'assets/images/fangyuxin.jpg',
-      'name': '方雨欣',
-      'time': '12小时前',
-      'content': '下午茶时间☕️ 在咖啡馆偶遇了大学室友，聊了好久好久，回忆起那些年一起熬夜赶论文的日子，真怀念啊～',
-      'images': [
-        'https://picsum.photos/seed/coffee1/400/400',
-        'https://picsum.photos/seed/coffee2/400/400',
-      ],
-      'likes': 16,
+      'time': '2天前',
+      'topic': '美食',
+      'content': '朋友来吃饭，炒了三个菜。最后一个糊了，端上桌大家还是吃完了。',
+      'images': ['assets/feed/cooking.jpg', 'assets/feed/cooking2.jpg'],
+      'likes': 3,
       'comments': 2,
       'isLiked': false,
     },
     {
-      'id': '16',
+      'id': '11',
+      'avatar': 'assets/images/yangxiaotong.jpg',
+      'name': '杨晓彤',
+      'time': '3天前',
+      'topic': '日常',
+      'content': '去参加同事婚礼，宴会厅空调太冷，披了件外套。喜糖味道一般。',
+      'images': ['assets/feed/wedding1.jpg', 'assets/feed/wedding2.jpg'],
+      'likes': 41,
+      'comments': 9,
+      'isLiked': true,
+    },
+    {
+      'id': '12',
+      'avatar': 'assets/images/fangyuxin.jpg',
+      'name': '方雨欣',
+      'time': '3天前',
+      'topic': '日常',
+      'content': '咖啡馆碰到大学室友，聊到傍晚。账单AA，各回各家。',
+      'images': ['assets/feed/coffee_meet.jpg', 'assets/feed/coffee2.jpg'],
+      'likes': 12,
+      'comments': 2,
+      'isLiked': false,
+    },
+    {
+      'id': '13',
       'avatar': 'assets/images/sunhaoyu.jpg',
       'name': '孙浩宇',
-      'time': '13小时前',
-      'content': '健身房打卡第30天✨ 坚持真的会有回报，现在的状态比一个月前好太多了！继续加油，目标是练出腹肌💪',
-      'images': [
-        'https://picsum.photos/seed/gym1/400/400',
-        'https://picsum.photos/seed/gym2/400/400',
-      ],
-      'likes': 25,
-      'comments': 4,
-      'isLiked': true,
+      'time': '上周',
+      'topic': '运动',
+      'content': '健身房满员，器械排队。做完一组就走了，至少没鸽自己。',
+      'images': ['assets/feed/gym.jpg', 'assets/feed/gym2.jpg'],
+      'likes': 8,
+      'comments': 0,
+      'isLiked': false,
     },
   ];
 
+  static const _topics = ['全部', '美食', '出行', '日常', '运动', '学习'];
+
   @override
   Widget build(BuildContext context) {
+    final filteredFeeds = _feedList.where((feed) {
+      if (_userManager.isUserBlocked(feed['name'] as String)) return false;
+      if (_topic != '全部' && feed['topic'] != _topic) return false;
+      return true;
+    }).toList();
+
     return Scaffold(
-      backgroundColor: const Color(0xFFF8F9FD),
-      body: Column(
-        children: [
-          Container(
-            decoration: BoxDecoration(
-              color: Colors.white,
-              border: Border(
-                bottom: BorderSide(color: Colors.grey[100]!, width: 1),
-              ),
-            ),
-            child: SafeArea(
-              child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 16),
-                child: Row(
-                  children: [
-                    Container(
-                      width: 36,
-                      height: 36,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        boxShadow: [
-                          BoxShadow(
-                            color: const Color(0xFF9D31FF).withValues(alpha: 0.2),
-                            blurRadius: 8,
-                            offset: const Offset(0, 2),
-                          ),
-                        ],
-                      ),
-                      child: ClipRRect(
-                        borderRadius: BorderRadius.circular(10),
-                        child: Image.asset(
-                          'assets/logo.png',
-                          fit: BoxFit.cover,
-                        ),
-                      ),
-                    ),
-                    const SizedBox(width: 12),
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        ShaderMask(
-                          shaderCallback: (bounds) => const LinearGradient(
-                            colors: [Color(0xFF9D31FF), Color(0xFFF260FF)],
-                          ).createShader(bounds),
-                          child: const Text(
-                            '探友',
-                            style: TextStyle(
-                              color: Colors.white,
-                              fontSize: 20,
-                              fontWeight: FontWeight.bold,
-                              letterSpacing: 0.5,
-                            ),
-                          ),
-                        ),
-                        Text(
-                          '动态广场',
-                          style: TextStyle(
-                            color: Colors.grey[500],
-                            fontSize: 11,
-                          ),
-                        ),
-                      ],
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-          Expanded(
-            child: Builder(
-              builder: (context) {
-                final filteredFeeds = _feedList
-                    .where((feed) => !_userManager.isUserBlocked(feed['name'] as String))
-                    .toList();
-                
-                if (filteredFeeds.isEmpty) {
-                  return Center(
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Icon(
-                          Icons.inbox_outlined,
-                          size: 80,
-                          color: Colors.grey[300],
-                        ),
-                        const SizedBox(height: 16),
-                        Text(
-                          '暂无动态',
-                          style: TextStyle(
-                            fontSize: 16,
-                            color: Colors.grey[400],
-                          ),
-                        ),
-                      ],
-                    ),
-                  );
-                }
-                
-                return ListView.builder(
-                  padding: const EdgeInsets.all(16),
-                  itemCount: filteredFeeds.length,
-                  itemBuilder: (context, index) {
-                    final feed = filteredFeeds[index];
-                    final originalIndex = _feedList.indexOf(feed);
-                    return Column(
-                      children: [
-                        _buildFeedCard(
-                          context: context,
-                          feedId: feed['id'],
-                          feedIndex: originalIndex,
-                          avatar: feed['avatar'],
-                          name: feed['name'],
-                          time: feed['time'],
-                          content: feed['content'],
-                          images: List<String>.from(feed['images']),
-                          likes: feed['likes'],
-                          comments: feed['comments'],
-                          isLiked: feed['isLiked'],
-                        ),
-                        if (index < filteredFeeds.length - 1) const SizedBox(height: 12),
-                      ],
-                    );
-                  },
-                );
-              },
-            ),
-          ),
-        ],
-      ),
-      floatingActionButton: FloatingActionButton(
+      backgroundColor: const Color(0xFFF7F4F2),
+      floatingActionButton: FloatingActionButton.extended(
         onPressed: () {
           Navigator.push(
             context,
             MaterialPageRoute(builder: (context) => const PublishPostScreen()),
           );
         },
-        backgroundColor: const Color(0xFF9D31FF),
-        child: const Icon(Icons.edit_rounded, size: 28),
+        backgroundColor: const Color(0xFFE85A7A),
+        icon: const Icon(Icons.edit_rounded, color: Colors.white),
+        label: const Text('发动态', style: TextStyle(color: Colors.white)),
+      ),
+      body: CustomScrollView(
+        slivers: [
+          SliverAppBar(
+            pinned: true,
+            floating: true,
+            backgroundColor: Colors.white,
+            elevation: 0,
+            toolbarHeight: 58,
+            titleSpacing: 16,
+            title: const Text(
+              '发现',
+              style: TextStyle(
+                color: Color(0xFF1A1A1A),
+                fontSize: 24,
+                fontWeight: FontWeight.w800,
+              ),
+            ),
+            actions: [
+              IconButton(
+                onPressed: () {},
+                icon: Icon(Icons.search_rounded, color: Colors.grey[700]),
+              ),
+              const SizedBox(width: 4),
+            ],
+          ),
+          SliverToBoxAdapter(
+            child: Container(
+              color: Colors.white,
+              padding: const EdgeInsets.only(bottom: 12),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  SizedBox(
+                    height: 40,
+                    child: ListView.separated(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      scrollDirection: Axis.horizontal,
+                      itemCount: _topics.length,
+                      separatorBuilder: (_, __) => const SizedBox(width: 8),
+                      itemBuilder: (context, i) {
+                        final t = _topics[i];
+                        final on = _topic == t;
+                        return GestureDetector(
+                          onTap: () => setState(() => _topic = t),
+                          child: AnimatedContainer(
+                            duration: const Duration(milliseconds: 180),
+                            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
+                            decoration: BoxDecoration(
+                              color: on ? const Color(0xFFE85A7A) : const Color(0xFFF5F3F1),
+                              borderRadius: BorderRadius.circular(20),
+                            ),
+                            child: Text(
+                              t,
+                              style: TextStyle(
+                                color: on ? Colors.white : const Color(0xFF555555),
+                                fontSize: 13,
+                                fontWeight: on ? FontWeight.w700 : FontWeight.w500,
+                              ),
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                  const SizedBox(height: 14),
+                  const Padding(
+                    padding: EdgeInsets.symmetric(horizontal: 16),
+                    child: Text(
+                      '最近活跃',
+                      style: TextStyle(
+                        fontSize: 13,
+                        fontWeight: FontWeight.w600,
+                        color: Color(0xFF888888),
+                      ),
+                    ),
+                  ),
+                  const SizedBox(height: 10),
+                  SizedBox(
+                    height: 78,
+                    child: ListView.separated(
+                      padding: const EdgeInsets.symmetric(horizontal: 16),
+                      scrollDirection: Axis.horizontal,
+                      itemCount: _feedList.length > 8 ? 8 : _feedList.length,
+                      separatorBuilder: (_, __) => const SizedBox(width: 14),
+                      itemBuilder: (context, i) {
+                        final f = _feedList[i];
+                        return GestureDetector(
+                          onTap: () {
+                            final stats = {
+                              'followers': '${10 + i * 7}',
+                              'following': '${5 + i * 3}',
+                              'likes': '${50 + i * 19}',
+                            };
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (_) => UserProfileScreen(
+                                  avatar: f['avatar'] as String,
+                                  name: f['name'] as String,
+                                  signature: '偶尔发点日常',
+                                  followers: stats['followers']!,
+                                  following: stats['following']!,
+                                  likes: stats['likes']!,
+                                  mainFeed: f,
+                                ),
+                              ),
+                            );
+                          },
+                          child: SizedBox(
+                            width: 58,
+                            child: Column(
+                              children: [
+                                Container(
+                                  padding: const EdgeInsets.all(2),
+                                  decoration: BoxDecoration(
+                                    shape: BoxShape.circle,
+                                    border: Border.all(
+                                      color: const Color(0xFFE85A7A),
+                                      width: 2,
+                                    ),
+                                  ),
+                                  child: CircleAvatar(
+                                    radius: 24,
+                                    backgroundImage: AssetImage(f['avatar'] as String),
+                                  ),
+                                ),
+                                const SizedBox(height: 6),
+                                Text(
+                                  f['name'] as String,
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: const TextStyle(fontSize: 11, color: Color(0xFF555555)),
+                                ),
+                              ],
+                            ),
+                          ),
+                        );
+                      },
+                    ),
+                  ),
+                ],
+              ),
+            ),
+          ),
+          if (filteredFeeds.isEmpty)
+            SliverFillRemaining(
+              hasScrollBody: false,
+              child: Center(
+                child: Text('这一类暂时还没有内容', style: TextStyle(color: Colors.grey[400])),
+              ),
+            )
+          else
+            SliverPadding(
+              padding: const EdgeInsets.fromLTRB(14, 14, 14, 88),
+              sliver: SliverList(
+                delegate: SliverChildBuilderDelegate(
+                  (context, index) {
+                    final feed = filteredFeeds[index];
+                    final originalIndex = _feedList.indexOf(feed);
+                    return Padding(
+                      padding: const EdgeInsets.only(bottom: 14),
+                      child: _buildFeedCard(
+                        context: context,
+                        feedId: feed['id'] as String,
+                        feedIndex: originalIndex,
+                        avatar: feed['avatar'] as String,
+                        name: feed['name'] as String,
+                        time: feed['time'] as String,
+                        content: feed['content'] as String,
+                        images: List<String>.from(feed['images'] as List),
+                        likes: feed['likes'] as int,
+                        comments: feed['comments'] as int,
+                        isLiked: feed['isLiked'] as bool,
+                      ),
+                    );
+                  },
+                  childCount: filteredFeeds.length,
+                ),
+              ),
+            ),
+        ],
       ),
     );
   }
@@ -614,7 +636,7 @@ class _FeedScreenState extends State<FeedScreen> {
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
                       content: const Text('已屏蔽该动态'),
-                      backgroundColor: const Color(0xFF9D31FF),
+                      backgroundColor: const Color(0xFFC94A5A),
                       behavior: SnackBarBehavior.floating,
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                     ),
@@ -718,7 +740,7 @@ class _FeedScreenState extends State<FeedScreen> {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
                   content: Text(successMessage),
-                  backgroundColor: const Color(0xFF9D31FF),
+                  backgroundColor: const Color(0xFFC94A5A),
                   behavior: SnackBarBehavior.floating,
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                 ),
@@ -726,7 +748,7 @@ class _FeedScreenState extends State<FeedScreen> {
             },
             child: const Text(
               '确定',
-              style: TextStyle(color: Color(0xFF9D31FF)),
+              style: TextStyle(color: Color(0xFFC94A5A)),
             ),
           ),
         ],
@@ -748,453 +770,347 @@ class _NotesScreenState extends State<NotesScreen> {
       'id': 'note1',
       'time': '14:30',
       'date': '2月5日',
-      'mood': '🤗',
-      'title': '春日咖啡时光',
-      'content': '今天下午去了新开的咖啡馆，点了一杯拿铁。阳光透过落地窗洒进来，整个空间都变得温暖起来。店里放着轻柔的爵士乐，让人不自觉地放松下来。',
-      'images': [
-        'https://picsum.photos/seed/cafe1/600/400',
-        'https://picsum.photos/seed/cafe2/600/400',
-        'https://picsum.photos/seed/cafe3/600/400',
-      ],
-      'likes': 20,
-      'comments': 3,
+      'mood': '🙂',
+      'title': '新店咖啡',
+      'content': '点了美式，偏酸。座位靠窗，能看到路口红绿灯。坐了四十分钟，把邮件回完了。',
+      'images': ['assets/feed/coffee_note.jpg', 'assets/feed/coffee2.jpg'],
+      'tag': '咖啡',
     },
     {
       'id': 'note2',
-      'time': '20:15',
+      'time': '21:05',
       'date': '2月4日',
-      'mood': '😴',
-      'title': '夜跑感悟',
-      'content': '晚上去公园跑了5公里，感觉整个人都轻松了很多。夜晚的风很凉爽，路灯下的影子一长一短。跑步的时候什么都不想，只专注于呼吸和脚步。',
-      'images': [
-        'https://picsum.photos/seed/running1/600/400',
-        'https://picsum.photos/seed/running2/600/400',
-      ],
-      'likes': 25,
-      'comments': 4,
+      'mood': '😮‍💨',
+      'title': '夜跑半圈',
+      'content': '本来想跑五公里，两公里就停了。回去冲了澡，比坐着刷手机强一点。',
+      'images': ['assets/feed/jogging.jpg', 'assets/feed/rain.jpg'],
+      'tag': '运动',
     },
     {
       'id': 'note3',
-      'time': '16:45',
+      'time': '16:12',
       'date': '2月3日',
       'mood': '😌',
-      'title': '读书笔记',
-      'content': '今天读完了《月亮与六便士》，被主人公的勇气深深打动。有时候我们需要的不是别人的理解，而是追随内心的勇气。',
-      'images': [
-        'https://picsum.photos/seed/book1/600/400',
-      ],
-      'likes': 25,
-      'comments': 4,
+      'title': '翻了几页书',
+      'content': '《月亮与六便士》看到中间。主人公有点决绝，看得我不太舒服，但还是想看完。',
+      'images': ['assets/feed/book.jpg', 'assets/feed/library2.jpg'],
+      'tag': '阅读',
     },
     {
       'id': 'note4',
-      'time': '10:20',
-      'date': '2月2日',
-      'mood': '😊',
-      'title': '周末计划',
-      'content': '这个周末想去海边走走，已经很久没有看海了。准备带上相机，记录下海浪和日落。希望天气能好一点。',
-      'images': [],
-      'likes': 25,
-      'comments': 4,
+      'time': '09:40',
+      'date': '2月1日',
+      'mood': '😶',
+      'title': '周末打算',
+      'content': '想去海边，看预报可能下雨。不去也行，在家把阳台衣服收了。',
+      'images': ['assets/feed/weekend.jpg', 'assets/feed/note_home.jpg'],
+      'tag': '计划',
+    },
+    {
+      'id': 'note5',
+      'time': '19:20',
+      'date': '1月28日',
+      'mood': '🙂',
+      'title': '阳台绿意',
+      'content': '新买的绿萝搬上来了，浇水浇多了一次，托盘积水。下次少倒点。',
+      'images': ['assets/feed/plants.jpg', 'assets/feed/balcony.jpg'],
+      'tag': '家',
+    },
+    {
+      'id': 'note6',
+      'time': '22:10',
+      'date': '1月25日',
+      'mood': '😴',
+      'title': '加班收尾',
+      'content': '项目差不多交了，键盘敲到发烫。明天补觉，今晚先把自己哄睡。',
+      'images': ['assets/feed/nightcode.jpg', 'assets/feed/desk.jpg'],
+      'tag': '工作',
     },
   ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF8F9FD),
-      body: Column(
-        children: [
-          Container(
-            decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                colors: [Color(0xFF9D31FF), Color(0xFFF260FF), Color(0xFFFF609F)],
-              ),
-            ),
-            child: SafeArea(
-              child: Padding(
-                padding: const EdgeInsets.all(20),
-                child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text(
-                          '时光笔记',
-                          style: TextStyle(
-                            color: Colors.white,
-                            fontSize: 24,
-                            fontWeight: FontWeight.bold,
-                          ),
-                        ),
-                        const SizedBox(height: 4),
-                        Text(
-                          '记录每一个珍贵时刻',
-                          style: TextStyle(
-                            color: Colors.white.withValues(alpha: 0.8),
-                            fontSize: 14,
-                          ),
-                        ),
-                      ],
-                    ),
-                    Container(
-                      width: 40,
-                      height: 40,
-                      decoration: BoxDecoration(
-                        color: Colors.white.withValues(alpha: 0.2),
-                        borderRadius: BorderRadius.circular(20),
-                      ),
-                      child: IconButton(
-                        icon: const Icon(Icons.add, color: Colors.white, size: 20),
-                        onPressed: () {
-                          Navigator.push(
-                            context,
-                            MaterialPageRoute(builder: (context) => const PublishNoteScreen()),
-                          );
-                        },
-                        padding: EdgeInsets.zero,
-                      ),
-                    ),
-                  ],
-                ),
-              ),
-            ),
-          ),
-          Expanded(
-            child: ListView.builder(
-              padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 24),
-              itemCount: _notesList.length,
-              itemBuilder: (context, index) {
-                final note = _notesList[index];
-                return _buildTimelineNote(
-                  context,
-                  noteIndex: index,
-                  time: note['time'],
-                  date: note['date'],
-                  mood: note['mood'],
-                  title: note['title'],
-                  content: note['content'],
-                  images: List<String>.from(note['images']),
-                  isFirst: index == 0,
-                  isLast: index == _notesList.length - 1,
-                );
-              },
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildTimelineNote(
-    BuildContext context, {
-    required int noteIndex,
-    required String time,
-    required String date,
-    required String mood,
-    required String title,
-    required String content,
-    required List<String> images,
-    bool isFirst = false,
-    bool isLast = false,
-  }) {
-    return Container(
-      margin: const EdgeInsets.only(bottom: 24),
-      child: Row(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          SizedBox(
-            width: 40,
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.end,
-              children: [
-                Text(
-                  time,
-                  style: const TextStyle(
-                    fontSize: 13,
-                    fontWeight: FontWeight.w600,
-                    color: Color(0xFF9D31FF),
-                  ),
-                ),
-                const SizedBox(height: 2),
-                Text(
-                  date,
-                  style: TextStyle(
-                    fontSize: 10,
-                    color: Colors.grey[500],
-                  ),
-                ),
-              ],
-            ),
-          ),
-          const SizedBox(width: 10),
-          Column(
-            children: [
-              if (!isFirst)
-                Container(
-                  width: 2,
-                  height: 8,
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                      colors: [
-                        const Color(0xFF9D31FF).withValues(alpha: 0.3),
-                        const Color(0xFF9D31FF).withValues(alpha: 0.5),
-                      ],
-                    ),
-                  ),
-                ),
-              Container(
-                width: 10,
-                height: 10,
-                decoration: BoxDecoration(
-                  shape: BoxShape.circle,
-                  gradient: const LinearGradient(
-                    colors: [Color(0xFF9D31FF), Color(0xFFF260FF)],
-                  ),
-                  border: Border.all(
-                    color: const Color(0xFFF8F9FD),
-                    width: 2.5,
-                  ),
-                  boxShadow: [
-                    BoxShadow(
-                      color: const Color(0xFF9D31FF).withValues(alpha: 0.3),
-                      blurRadius: 6,
-                      offset: const Offset(0, 2),
-                    ),
-                  ],
-                ),
-              ),
-              // 下方线条
-              if (!isLast)
-                Container(
-                  width: 2,
-                  height: 200,
-                  decoration: BoxDecoration(
-                    gradient: LinearGradient(
-                      begin: Alignment.topCenter,
-                      end: Alignment.bottomCenter,
-                      colors: [
-                        const Color(0xFF9D31FF).withValues(alpha: 0.5),
-                        const Color(0xFF9D31FF).withValues(alpha: 0.2),
-                      ],
-                    ),
-                  ),
-                ),
-            ],
-          ),
-          const SizedBox(width: 10),
-          Expanded(
-            child: GestureDetector(
-              onTap: () {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (context) => NoteDetailScreen(
-                      time: time,
-                      date: date,
-                      mood: mood,
-                      title: title,
-                      content: content,
-                      images: images,
-                    ),
-                  ),
-                );
-              },
-              child: Container(
-                decoration: BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.circular(16),
-                  boxShadow: [
-                    BoxShadow(
-                      color: const Color(0xFF9D31FF).withValues(alpha: 0.08),
-                      blurRadius: 12,
-                      offset: const Offset(0, 4),
-                    ),
-                  ],
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.all(16),
-                      child: Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Expanded(
-                            child: Row(
-                              children: [
-                                Text(
-                                  mood,
-                                  style: const TextStyle(fontSize: 20),
-                                ),
-                                const SizedBox(width: 8),
-                                Expanded(
-                                  child: Text(
-                                    title,
-                                    style: const TextStyle(
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.w600,
-                                      color: Colors.black87,
-                                      height: 1.3,
-                                    ),
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                          const SizedBox(width: 8),
-                          GestureDetector(
-                            onTap: () {
-                              _showDeleteDialog(context, title, noteIndex);
-                            },
-                            child: Container(
-                              padding: const EdgeInsets.all(6),
-                              decoration: BoxDecoration(
-                                color: Colors.grey[100],
-                                borderRadius: BorderRadius.circular(8),
-                              ),
-                              child: Icon(
-                                Icons.delete_outline,
-                                size: 18,
-                                color: Colors.grey[600],
-                              ),
-                            ),
-                          ),
-                        ],
-                      ),
-                    ),
-                    Padding(
-                      padding: const EdgeInsets.symmetric(horizontal: 16),
-                      child: Text(
-                        content,
-                        style: TextStyle(
-                          fontSize: 15,
-                          color: Colors.grey[700],
-                          height: 1.6,
-                        ),
-                      ),
-                    ),
-                    if (images.isNotEmpty) ...[
-                      const SizedBox(height: 12),
-                      Padding(
-                        padding: const EdgeInsets.symmetric(horizontal: 16),
-                        child: _buildImageGrid(images),
-                      ),
-                    ],
-                    const SizedBox(height: 16),
-                  ],
-                ),
-              ),
-            ),
-          ),
-        ],
-      ),
-    );
-  }
-
-  Widget _buildImageGrid(List<String> images) {
-    if (images.isEmpty) return const SizedBox();
-
-    if (images.length == 1) {
-      return ClipRRect(
-        borderRadius: BorderRadius.circular(12),
-        child: Image.network(
-          images[0],
-          width: double.infinity,
-          height: 180,
-          fit: BoxFit.cover,
-        ),
-      );
-    } else if (images.length == 2) {
-      return Row(
-        children: images
-            .map((url) => Expanded(
-                  child: Padding(
-                    padding: EdgeInsets.only(
-                      right: url == images.last ? 0 : 8,
-                    ),
-                    child: ClipRRect(
-                      borderRadius: BorderRadius.circular(12),
-                      child: Image.network(
-                        url,
-                        height: 140,
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                  ),
-                ))
-            .toList(),
-      );
-    } else {
-      return GridView.builder(
-        shrinkWrap: true,
-        physics: const NeverScrollableScrollPhysics(),
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 3,
-          crossAxisSpacing: 8,
-          mainAxisSpacing: 8,
-        ),
-        itemCount: images.length > 3 ? 3 : images.length,
-        itemBuilder: (context, index) {
-          return ClipRRect(
-            borderRadius: BorderRadius.circular(12),
-            child: Image.network(
-              images[index],
-              fit: BoxFit.cover,
-            ),
+      backgroundColor: const Color(0xFFF7F4F2),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          Navigator.push(
+            context,
+            MaterialPageRoute(builder: (context) => const PublishNoteScreen()),
           );
         },
-      );
+        backgroundColor: const Color(0xFFE85A7A),
+        child: const Icon(Icons.add, color: Colors.white),
+      ),
+      body: CustomScrollView(
+        slivers: [
+          SliverToBoxAdapter(
+            child: Container(
+              decoration: const BoxDecoration(
+                gradient: LinearGradient(
+                  begin: Alignment.topLeft,
+                  end: Alignment.bottomRight,
+                  colors: [Color(0xFFE85A7A), Color(0xFFC94A5A)],
+                ),
+              ),
+              child: SafeArea(
+                bottom: false,
+                child: Padding(
+                  padding: const EdgeInsets.fromLTRB(20, 12, 20, 28),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      const Text(
+                        '时光',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 28,
+                          fontWeight: FontWeight.w800,
+                        ),
+                      ),
+                      const SizedBox(height: 6),
+                      Text(
+                        '把日子翻成可以回看的页',
+                        style: TextStyle(
+                          color: Colors.white.withValues(alpha: 0.88),
+                          fontSize: 14,
+                        ),
+                      ),
+                      const SizedBox(height: 18),
+                      Row(
+                        children: [
+                          _headerStat('${_notesList.length}', '篇笔记'),
+                          const SizedBox(width: 10),
+                          _headerStat('${_photoCount()}', '张照片'),
+                          const SizedBox(width: 10),
+                          _headerStat('${_notesList.length}', '个标签'),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ),
+          SliverPadding(
+            padding: const EdgeInsets.fromLTRB(16, 18, 16, 100),
+            sliver: SliverList(
+              delegate: SliverChildBuilderDelegate(
+                (context, index) {
+                  final note = _notesList[index];
+                  return _buildNoteCard(context, index, note);
+                },
+                childCount: _notesList.length,
+              ),
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+
+  int _photoCount() {
+    var total = 0;
+    for (final n in _notesList) {
+      final imgs = n['images'];
+      if (imgs is List) total += imgs.length;
     }
+    return total;
+  }
+
+  Widget _headerStat(String value, String label) {
+    return Expanded(
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 12),
+        decoration: BoxDecoration(
+          color: Colors.white.withValues(alpha: 0.18),
+          borderRadius: BorderRadius.circular(14),
+        ),
+        child: Column(
+          children: [
+            Text(
+              value,
+              style: const TextStyle(
+                color: Colors.white,
+                fontSize: 18,
+                fontWeight: FontWeight.w700,
+              ),
+            ),
+            const SizedBox(height: 2),
+            Text(
+              label,
+              style: TextStyle(
+                color: Colors.white.withValues(alpha: 0.85),
+                fontSize: 11,
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildNoteCard(BuildContext context, int noteIndex, Map<String, dynamic> note) {
+    final images = List<String>.from(note['images'] as List);
+    final cover = images.isNotEmpty ? images.first : 'assets/feed/desk.jpg';
+    return GestureDetector(
+      onTap: () {
+        Navigator.push(
+          context,
+          MaterialPageRoute(
+            builder: (context) => NoteDetailScreen(
+              time: note['time'],
+              date: note['date'],
+              mood: note['mood'],
+              title: note['title'],
+              content: note['content'],
+              images: images,
+            ),
+          ),
+        );
+      },
+      child: Container(
+        margin: const EdgeInsets.only(bottom: 16),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(18),
+          boxShadow: [
+            BoxShadow(
+              color: Colors.black.withValues(alpha: 0.05),
+              blurRadius: 12,
+              offset: const Offset(0, 4),
+            ),
+          ],
+        ),
+        clipBehavior: Clip.antiAlias,
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: [
+            Stack(
+              children: [
+                AspectRatio(
+                  aspectRatio: 16 / 10,
+                  child: AppImage(cover, fit: BoxFit.cover),
+                ),
+                Positioned(
+                  left: 12,
+                  top: 12,
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 5),
+                    decoration: BoxDecoration(
+                      color: Colors.black.withValues(alpha: 0.45),
+                      borderRadius: BorderRadius.circular(20),
+                    ),
+                    child: Text(
+                      '${note['mood']} ${note['tag']}',
+                      style: const TextStyle(color: Colors.white, fontSize: 12),
+                    ),
+                  ),
+                ),
+                Positioned(
+                  right: 8,
+                  top: 8,
+                  child: IconButton(
+                    onPressed: () => _showDeleteDialog(context, note['title'] as String, noteIndex),
+                    icon: const Icon(Icons.delete_outline, color: Colors.white, size: 20),
+                    style: IconButton.styleFrom(backgroundColor: Colors.black38),
+                  ),
+                ),
+                if (images.length > 1)
+                  Positioned(
+                    right: 12,
+                    bottom: 12,
+                    child: Container(
+                      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+                      decoration: BoxDecoration(
+                        color: Colors.black54,
+                        borderRadius: BorderRadius.circular(10),
+                      ),
+                      child: Text(
+                        '1/${images.length}',
+                        style: const TextStyle(color: Colors.white, fontSize: 11),
+                      ),
+                    ),
+                  ),
+              ],
+            ),
+            Padding(
+              padding: const EdgeInsets.fromLTRB(16, 14, 16, 16),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    '${note['date']} · ${note['time']}',
+                    style: TextStyle(fontSize: 12, color: Colors.grey[500]),
+                  ),
+                  const SizedBox(height: 8),
+                  Text(
+                    note['title'] as String,
+                    style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w700,
+                      color: Color(0xFF1A1A1A),
+                    ),
+                  ),
+                  const SizedBox(height: 6),
+                  Text(
+                    note['content'] as String,
+                    maxLines: 2,
+                    overflow: TextOverflow.ellipsis,
+                    style: TextStyle(fontSize: 14, height: 1.5, color: Colors.grey[700]),
+                  ),
+                  if (images.length > 1) ...[
+                    const SizedBox(height: 12),
+                    SizedBox(
+                      height: 64,
+                      child: ListView.separated(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: images.length,
+                        separatorBuilder: (_, __) => const SizedBox(width: 8),
+                        itemBuilder: (context, i) {
+                          return ClipRRect(
+                            borderRadius: BorderRadius.circular(10),
+                            child: AppImage(images[i], width: 64, height: 64, fit: BoxFit.cover),
+                          );
+                        },
+                      ),
+                    ),
+                  ],
+                ],
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
   }
 
   void _showDeleteDialog(BuildContext context, String title, int noteIndex) {
     showDialog(
       context: context,
       builder: (context) => AlertDialog(
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(20),
-        ),
-        title: const Text(
-          '删除笔记',
-          style: TextStyle(fontWeight: FontWeight.w600),
-        ),
+        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+        title: const Text('删除笔记', style: TextStyle(fontWeight: FontWeight.w600)),
         content: Text('确定要删除「$title」吗？'),
         actions: [
           TextButton(
             onPressed: () => Navigator.pop(context),
-            child: Text(
-              '取消',
-              style: TextStyle(color: Colors.grey[600]),
-            ),
+            child: Text('取消', style: TextStyle(color: Colors.grey[600])),
           ),
           TextButton(
             onPressed: () {
               Navigator.pop(context);
-              setState(() {
-                _notesList.removeAt(noteIndex);
-              });
+              setState(() => _notesList.removeAt(noteIndex));
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
                   content: const Text('笔记已删除'),
-                  backgroundColor: const Color(0xFF9D31FF),
+                  backgroundColor: const Color(0xFFC94A5A),
                   behavior: SnackBarBehavior.floating,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
+                  shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                 ),
               );
             },
-            child: const Text(
-              '删除',
-              style: TextStyle(color: Colors.red),
-            ),
+            child: const Text('删除', style: TextStyle(color: Colors.red)),
           ),
         ],
       ),
@@ -1231,342 +1147,319 @@ class _ProfileScreenState extends State<ProfileScreen> {
   final List<Map<String, dynamic>> _myRecentFeeds = [
     {
       'id': 'my1',
-      'time': '2分钟前',
-      'content': '今天的午后阳光真好，在咖啡馆遇见了一只超可爱的橘猫🐱 它一直在我脚边蹭来蹭去，心都要化了～',
-      'images': [
-        'https://picsum.photos/seed/cat1/400/400',
-        'https://picsum.photos/seed/cat2/400/400',
-        'https://picsum.photos/seed/cat3/400/400',
-      ],
-      'likes': 128,
-      'comments': 32,
-    },
-    {
-      'id': 'my2',
-      'time': '15分钟前',
-      'content': '第一次尝试做提拉米苏，虽然卖相不太好，但味道还不错！下次继续努力💪',
-      'images': [
-        'https://picsum.photos/seed/dessert1/400/400',
-        'https://picsum.photos/seed/dessert2/400/400',
-      ],
-      'likes': 25,
+      'time': '20分钟前',
+      'content': '咖啡馆角落有只橘猫，踩了我鞋两脚。店员说它不让摸，结果它自己跳上我腿。',
+      'images': ['assets/feed/cat1.jpg', 'assets/feed/cat2.jpg', 'assets/feed/coffee_meet.jpg'],
+      'likes': 17,
       'comments': 4,
     },
     {
+      'id': 'my2',
+      'time': '今天早上',
+      'content': '提拉米苏失败了，奶油化了。下次少放朗姆酒。',
+      'images': ['assets/feed/tiramisu.jpg', 'assets/feed/cake2.jpg'],
+      'likes': 5,
+      'comments': 2,
+    },
+    {
       'id': 'my3',
-      'time': '5小时前',
-      'content': '今天在咖啡馆偶遇了大学同学，聊了好久好久☕️ 时光飞逝，但友谊依旧。感恩生命中遇到的每一个人～',
-      'images': [
-        'https://picsum.photos/seed/friends1/400/400',
-        'https://picsum.photos/seed/friends2/400/400',
-      ],
-      'likes': 32,
-      'comments': 7,
+      'time': '昨天',
+      'content': '偶遇同学，聊了一会儿工作。各请一杯，分开时都说下次再约。',
+      'images': ['assets/feed/coffee_meet.jpg', 'assets/feed/coffee2.jpg'],
+      'likes': 9,
+      'comments': 1,
     },
     {
       'id': 'my4',
-      'time': '昨天',
-      'content': '终于把阳台改造完成了🌿 种了好多绿植，每天早上起来看到这些小生命就觉得很治愈。生活需要一点绿色！',
-      'images': [
-        'https://picsum.photos/seed/plants1/400/400',
-        'https://picsum.photos/seed/plants2/400/400',
-        'https://picsum.photos/seed/plants3/400/400',
-      ],
-      'likes': 41,
-      'comments': 9,
+      'time': '前天',
+      'content': '阳台多摆了两盆绿萝。早上浇水浇多了，托盘溢出来一圈。',
+      'images': ['assets/feed/plants.jpg', 'assets/feed/balcony.jpg'],
+      'likes': 11,
+      'comments': 3,
     },
     {
       'id': 'my5',
-      'time': '2天前',
-      'content': '夜跑打卡第100天�‍♀️ 从最初的坚持不了1公里，到现在轻松跑5公里，真的很有成就感！坚持就是胜利💪',
-      'images': [
-        'https://picsum.photos/seed/jogging1/400/400',
-      ],
-      'likes': 38,
-      'comments': 6,
+      'time': '上周',
+      'content': '夜跑三次，第三次下雨中途回去了。记录一下，免得忘。',
+      'images': ['assets/feed/jogging.jpg', 'assets/feed/rain.jpg'],
+      'likes': 2,
+      'comments': 0,
+    },
+    {
+      'id': 'my6',
+      'time': '上周',
+      'content': '下雪那天早起拍了一张，又回去睡了。',
+      'images': ['assets/feed/snow.jpg'],
+      'likes': 8,
+      'comments': 1,
     },
   ];
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFFAFBFF),
+      backgroundColor: const Color(0xFFF7F4F2),
       body: CustomScrollView(
         slivers: [
-          SliverAppBar(
-            expandedHeight: 80,
-            pinned: false,
-            backgroundColor: Colors.white,
-            elevation: 0,
-            flexibleSpace: FlexibleSpaceBar(
-              background: Container(
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    begin: Alignment.topCenter,
-                    end: Alignment.bottomCenter,
-                    colors: [
-                      Colors.white,
-                      const Color(0xFFF8F9FD).withValues(alpha: 0.3),
-                    ],
+          SliverToBoxAdapter(
+            child: Stack(
+              clipBehavior: Clip.none,
+              children: [
+                SizedBox(
+                  height: 200,
+                  width: double.infinity,
+                  child: AppImage('assets/home/cover_me.jpg', fit: BoxFit.cover),
+                ),
+                Positioned(
+                  left: 0,
+                  right: 0,
+                  bottom: 0,
+                  height: 80,
+                  child: Container(
+                    decoration: const BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.topCenter,
+                        end: Alignment.bottomCenter,
+                        colors: [Colors.transparent, Color(0x99000000)],
+                      ),
+                    ),
                   ),
                 ),
-                child: SafeArea(
+                SafeArea(
                   child: Padding(
-                    padding: const EdgeInsets.only(top: 12, left: 20, right: 20),
+                    padding: const EdgeInsets.fromLTRB(12, 8, 12, 0),
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.end,
                       children: [
-                        GestureDetector(
-                          onTap: () async {
-                            await Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) => const MolianStoreView()),
+                        _topIcon(Icons.account_balance_wallet_outlined, () async {
+                          await Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (_) => const MolianStoreView()),
+                          );
+                          setState(() {});
+                        }),
+                        const SizedBox(width: 8),
+                        _topIcon(Icons.chat_bubble_outline, () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (_) => const AIAssistantScreen()),
+                          );
+                        }),
+                        const SizedBox(width: 8),
+                        _topIcon(Icons.settings_outlined, () async {
+                          final result = await Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (_) => const SettingsScreen()),
+                          );
+                          if (result != null && mounted) {
+                            _userManager.updateUserInfo(
+                              nickname: result['nickname'],
+                              signature: result['signature'],
+                              avatarPath: result['avatarPath'],
                             );
                             setState(() {});
-                          },
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
-                            decoration: BoxDecoration(
-                              color: const Color(0xFFF8F9FD),
-                              borderRadius: BorderRadius.circular(12),
-                              border: Border.all(
-                                color: Colors.grey[200]!,
-                                width: 1,
-                              ),
-                            ),
-                            child: Row(
-                              mainAxisSize: MainAxisSize.min,
-                              children: [
-                                CoinIcon(size: 20, showShadow: false),
-                                const SizedBox(width: 6),
-                                Text(
-                                  '钱包',
-                                  style: TextStyle(
-                                    color: Colors.grey[700],
-                                    fontSize: 14,
-                                    fontWeight: FontWeight.w500,
-                                  ),
-                                ),
-                              ],
-                            ),
-                          ),
-                        ),
-                        const SizedBox(width: 12),
-                        GestureDetector(
-                          onTap: () async {
-                            final result = await Navigator.push(
-                              context,
-                              MaterialPageRoute(builder: (context) => const SettingsScreen()),
-                            );
-                            if (result != null && mounted) {
-                              _userManager.updateUserInfo(
-                                nickname: result['nickname'],
-                                signature: result['signature'],
-                                avatarPath: result['avatarPath'],
-                              );
-                              setState(() {});
-                            }
-                          },
-                          child: Container(
-                            width: 40,
-                            height: 40,
-                            decoration: BoxDecoration(
-                              color: const Color(0xFFF8F9FD),
-                              borderRadius: BorderRadius.circular(12),
-                              border: Border.all(
-                                color: Colors.grey[200]!,
-                                width: 1,
-                              ),
-                            ),
-                            child: Icon(
-                              Icons.settings,
-                              color: Colors.grey[700],
-                              size: 20,
-                            ),
-                          ),
-                        ),
+                          }
+                        }),
                       ],
                     ),
                   ),
                 ),
-              ),
+                Positioned(
+                  left: 20,
+                  bottom: -36,
+                  child: Container(
+                    padding: const EdgeInsets.all(3),
+                    decoration: const BoxDecoration(
+                      color: Colors.white,
+                      shape: BoxShape.circle,
+                    ),
+                    child: CircleAvatar(
+                      radius: 42,
+                      backgroundImage: _avatarProvider(),
+                    ),
+                  ),
+                ),
+              ],
             ),
           ),
           SliverToBoxAdapter(
             child: Padding(
-              padding: const EdgeInsets.only(top: 8),
+              padding: const EdgeInsets.fromLTRB(20, 48, 20, 0),
               child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  Container(
-                    margin: const EdgeInsets.symmetric(horizontal: 20),
-                    decoration: BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.circular(24),
-                      boxShadow: [
-                        BoxShadow(
-                          color: const Color(0xFF9D31FF).withValues(alpha: 0.08),
-                          blurRadius: 20,
-                          offset: const Offset(0, 8),
-                        ),
-                      ],
+                  Text(
+                    _userManager.nickname,
+                    style: const TextStyle(
+                      fontSize: 24,
+                      fontWeight: FontWeight.w800,
+                      color: Color(0xFF1A1A1A),
                     ),
-                    child: Column(
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.all(20),
-                          child: Row(
-                            children: [
-                              Container(
-                                width: 80,
-                                height: 80,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(20),
-                                  gradient: const LinearGradient(
-                                    colors: [Color(0xFF9D31FF), Color(0xFFF260FF)],
-                                  ),
-                                  boxShadow: [
-                                    BoxShadow(
-                                      color: const Color(0xFF9D31FF).withValues(alpha: 0.3),
-                                      blurRadius: 12,
-                                      offset: const Offset(0, 4),
-                                    ),
-                                  ],
-                                ),
-                                child: ClipRRect(
-                                  borderRadius: BorderRadius.circular(20),
-                                  child: _userManager.avatarPath != null
-                                      ? Image.file(
-                                          File(_userManager.avatarPath!),
-                                          fit: BoxFit.cover,
-                                        )
-                                      : Image.asset(
-                                          'assets/images/default_avatar.jpg',
-                                          fit: BoxFit.cover,
-                                        ),
-                                ),
-                              ),
-                              const SizedBox(width: 16),
-                              Expanded(
-                                child: Column(
-                                  crossAxisAlignment: CrossAxisAlignment.start,
-                                  children: [
-                                    Text(
-                                      _userManager.nickname,
-                                      style: const TextStyle(
-                                        fontSize: 22,
-                                        fontWeight: FontWeight.bold,
-                                        color: Colors.black87,
-                                      ),
-                                    ),
-                                    const SizedBox(height: 6),
-                                    Text(
-                                      _userManager.signature,
-                                      style: TextStyle(
-                                        fontSize: 14,
-                                        color: Colors.grey[600],
-                                        height: 1.4,
-                                      ),
-                                    ),
-                                  ],
-                                ),
-                              ),
-                            ],
+                  ),
+                  const SizedBox(height: 6),
+                  Text(
+                    _userManager.signature,
+                    style: TextStyle(fontSize: 14, color: Colors.grey[600], height: 1.4),
+                  ),
+                  const SizedBox(height: 18),
+                  Row(
+                    children: [
+                      _buildStatItem('42', '粉丝'),
+                      _buildStatItem('38', '关注'),
+                      _buildStatItem('186', '获赞'),
+                      _buildStatItem('${_myRecentFeeds.length}', '动态'),
+                    ],
+                  ),
+                  const SizedBox(height: 18),
+                  Row(
+                    children: [
+                      Expanded(
+                        child: _actionChip(Icons.edit_outlined, '编辑资料', () async {
+                          final result = await Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (_) => const SettingsScreen()),
+                          );
+                          if (result != null && mounted) {
+                            _userManager.updateUserInfo(
+                              nickname: result['nickname'],
+                              signature: result['signature'],
+                              avatarPath: result['avatarPath'],
+                            );
+                            setState(() {});
+                          }
+                        }),
+                      ),
+                      const SizedBox(width: 10),
+                      Expanded(
+                        child: _actionChip(Icons.chat_bubble_outline, '找小探聊聊', () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(builder: (_) => const AIAssistantScreen()),
+                          );
+                        }),
+                      ),
+                    ],
+                  ),
+                  const SizedBox(height: 22),
+                  const Text(
+                    '我的相册',
+                    style: TextStyle(fontSize: 18, fontWeight: FontWeight.w700),
+                  ),
+                  const SizedBox(height: 4),
+                  Text(
+                    '点开看看最近发过的图',
+                    style: TextStyle(fontSize: 12, color: Colors.grey[500]),
+                  ),
+                  const SizedBox(height: 12),
+                ],
+              ),
+            ),
+          ),
+          SliverPadding(
+            padding: const EdgeInsets.fromLTRB(16, 0, 16, 40),
+            sliver: SliverGrid(
+              gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                crossAxisCount: 2,
+                mainAxisSpacing: 10,
+                crossAxisSpacing: 10,
+                childAspectRatio: 0.82,
+              ),
+              delegate: SliverChildBuilderDelegate(
+                (context, index) {
+                  final feed = _myRecentFeeds[index];
+                  final images = List<String>.from(feed['images'] as List);
+                  final cover = images.first;
+                  return GestureDetector(
+                    onTap: () async {
+                      final result = await Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => PostDetailScreen(
+                            avatar: _userManager.avatarPathOrDefault,
+                            name: _userManager.nickname,
+                            time: feed['time'],
+                            content: feed['content'],
+                            images: images,
+                            likes: feed['likes'],
+                            comments: feed['comments'],
+                            isLiked: true,
+                            isMyPost: true,
                           ),
                         ),
-                        Container(
-                          height: 1,
-                          margin: const EdgeInsets.symmetric(horizontal: 20),
-                          decoration: BoxDecoration(
-                            gradient: LinearGradient(
-                              colors: [
-                                Colors.grey[200]!,
-                                Colors.grey[100]!,
-                                Colors.grey[200]!,
-                              ],
+                      );
+                      if (result != null && result['deleted'] == true && mounted) {
+                        setState(() => _myRecentFeeds.removeAt(index));
+                      }
+                    },
+                    child: Container(
+                      decoration: BoxDecoration(
+                        borderRadius: BorderRadius.circular(14),
+                        boxShadow: [
+                          BoxShadow(
+                            color: Colors.black.withValues(alpha: 0.06),
+                            blurRadius: 8,
+                            offset: const Offset(0, 3),
+                          ),
+                        ],
+                      ),
+                      clipBehavior: Clip.antiAlias,
+                      child: Stack(
+                        fit: StackFit.expand,
+                        children: [
+                          AppImage(cover, fit: BoxFit.cover),
+                          Positioned(
+                            left: 0,
+                            right: 0,
+                            bottom: 0,
+                            child: Container(
+                              padding: const EdgeInsets.fromLTRB(10, 24, 10, 10),
+                              decoration: const BoxDecoration(
+                                gradient: LinearGradient(
+                                  begin: Alignment.topCenter,
+                                  end: Alignment.bottomCenter,
+                                  colors: [Colors.transparent, Color(0xB3000000)],
+                                ),
+                              ),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    feed['content'] as String,
+                                    maxLines: 2,
+                                    overflow: TextOverflow.ellipsis,
+                                    style: const TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 12,
+                                      height: 1.35,
+                                    ),
+                                  ),
+                                  const SizedBox(height: 6),
+                                  Row(
+                                    children: [
+                                      const Icon(Icons.favorite, size: 12, color: Color(0xFFFF8FA3)),
+                                      const SizedBox(width: 3),
+                                      Text(
+                                        '${feed['likes']}',
+                                        style: const TextStyle(color: Colors.white70, fontSize: 11),
+                                      ),
+                                      const Spacer(),
+                                      if (images.length > 1)
+                                        Text(
+                                          '${images.length}图',
+                                          style: const TextStyle(color: Colors.white70, fontSize: 11),
+                                        ),
+                                    ],
+                                  ),
+                                ],
+                              ),
                             ),
                           ),
-                        ),
-                        Padding(
-                          padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-                          child: Row(
-                            children: [
-                              Expanded(child: _buildStatItem('42', '粉丝')),
-                              Container(
-                                width: 1,
-                                height: 40,
-                                decoration: BoxDecoration(
-                                  gradient: LinearGradient(
-                                    begin: Alignment.topCenter,
-                                    end: Alignment.bottomCenter,
-                                    colors: [
-                                      Colors.grey[200]!,
-                                      Colors.grey[300]!,
-                                      Colors.grey[200]!,
-                                    ],
-                                  ),
-                                ),
-                              ),
-                              Expanded(child: _buildStatItem('38', '关注')),
-                              Container(
-                                width: 1,
-                                height: 40,
-                                decoration: BoxDecoration(
-                                  gradient: LinearGradient(
-                                    begin: Alignment.topCenter,
-                                    end: Alignment.bottomCenter,
-                                    colors: [
-                                      Colors.grey[200]!,
-                                      Colors.grey[300]!,
-                                      Colors.grey[200]!,
-                                    ],
-                                  ),
-                                ),
-                              ),
-                              Expanded(child: _buildStatItem('186', '获赞')),
-                            ],
-                          ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
-                  ),
-                  const SizedBox(height: 16),
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 20),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      children: [
-                        const Text(
-                          '最近动态',
-                          style: TextStyle(
-                            fontSize: 18,
-                            fontWeight: FontWeight.w600,
-                            color: Colors.black87,
-                          ),
-                        ),
-                        const SizedBox(height: 12),
-                        ..._myRecentFeeds.asMap().entries.map((entry) {
-                          final index = entry.key;
-                          final feed = entry.value;
-                          return Column(
-                            children: [
-                              _buildMyRecentFeedCard(
-                                context: context,
-                                feedIndex: index,
-                                time: feed['time'],
-                                content: feed['content'],
-                                images: List<String>.from(feed['images']),
-                                likes: feed['likes'],
-                                comments: feed['comments'],
-                              ),
-                              if (index < _myRecentFeeds.length - 1) const SizedBox(height: 12),
-                            ],
-                          );
-                        }).toList(),
-                      ],
-                    ),
-                  ),
-                  const SizedBox(height: 40),
-                ],
+                  );
+                },
+                childCount: _myRecentFeeds.length,
               ),
             ),
           ),
@@ -1575,27 +1468,82 @@ class _ProfileScreenState extends State<ProfileScreen> {
     );
   }
 
+  ImageProvider _avatarProvider() {
+    final path = _userManager.avatarPath;
+    if (path != null && path.isNotEmpty) {
+      return FileImage(File(path));
+    }
+    return const AssetImage('assets/images/default_avatar.jpg');
+  }
+
+  Widget _topIcon(IconData icon, VoidCallback onTap) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        width: 38,
+        height: 38,
+        decoration: BoxDecoration(
+          color: Colors.black.withValues(alpha: 0.35),
+          borderRadius: BorderRadius.circular(12),
+        ),
+        child: Icon(icon, color: Colors.white, size: 18),
+      ),
+    );
+  }
+
+  Widget _actionChip(IconData icon, String label, VoidCallback onTap) {
+    return GestureDetector(
+      onTap: onTap,
+      child: Container(
+        padding: const EdgeInsets.symmetric(vertical: 12),
+        decoration: BoxDecoration(
+          color: Colors.white,
+          borderRadius: BorderRadius.circular(12),
+          border: Border.all(color: const Color(0xFFEDE8E4)),
+        ),
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(icon, size: 16, color: const Color(0xFFE85A7A)),
+            const SizedBox(width: 6),
+            Text(
+              label,
+              style: const TextStyle(
+                fontSize: 13,
+                fontWeight: FontWeight.w600,
+                color: Color(0xFF333333),
+              ),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+
   Widget _buildStatItem(String value, String label) {
-    return Column(
-      children: [
-        Text(
-          value,
-          style: const TextStyle(
-            fontSize: 24,
-            fontWeight: FontWeight.bold,
-            color: Colors.black,
+    return Expanded(
+      child: Column(
+        children: [
+          Text(
+            value,
+            style: const TextStyle(
+              fontSize: 20,
+              fontWeight: FontWeight.w800,
+              color: Color(0xFF1A1A1A),
+            ),
           ),
-        ),
-        const SizedBox(height: 6),
-        Text(
-          label,
-          style: const TextStyle(
-            color: Colors.black,
-            fontSize: 13,
-            fontWeight: FontWeight.w500,
+          const SizedBox(height: 4),
+          Text(
+            label,
+            style: TextStyle(
+              color: Colors.grey[600],
+              fontSize: 12,
+              fontWeight: FontWeight.w500,
+            ),
           ),
-        ),
-      ],
+        ],
+      ),
     );
   }
 
@@ -1639,7 +1587,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
           borderRadius: BorderRadius.circular(12),
           boxShadow: [
             BoxShadow(
-              color: const Color(0xFF9D31FF).withValues(alpha: 0.08),
+              color: const Color(0xFFC94A5A).withValues(alpha: 0.08),
               blurRadius: 8,
               offset: const Offset(0, 2),
             ),
@@ -1710,10 +1658,10 @@ class _ProfileScreenState extends State<ProfileScreen> {
 
     if (images.length == 1) {
       return ClipRRect(
-        borderRadius: BorderRadius.circular(8),
+        borderRadius: BorderRadius.circular(12),
         child: AspectRatio(
-          aspectRatio: 16 / 9,
-          child: Image.network(
+          aspectRatio: 4 / 3,
+          child: AppImage(
             images[0],
             fit: BoxFit.cover,
           ),
@@ -1721,7 +1669,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
       );
     } else if (images.length == 2) {
       return SizedBox(
-        height: 150,
+        height: 176,
         child: Row(
           children: images
               .map((url) => Expanded(
@@ -1731,7 +1679,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
                       ),
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(8),
-                        child: Image.network(
+                        child: AppImage(
                           url,
                           fit: BoxFit.cover,
                         ),
@@ -1755,7 +1703,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
         itemBuilder: (context, index) {
           return ClipRRect(
             borderRadius: BorderRadius.circular(8),
-            child: Image.network(
+            child: AppImage(
               images[index],
               fit: BoxFit.cover,
             ),
@@ -1816,7 +1764,7 @@ class _ProfileScreenState extends State<ProfileScreen> {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
                   content: const Text('动态已删除'),
-                  backgroundColor: const Color(0xFF9D31FF),
+                  backgroundColor: const Color(0xFFC94A5A),
                   behavior: SnackBarBehavior.floating,
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                 ),
@@ -1925,7 +1873,6 @@ class _FeedCardState extends State<_FeedCard> with SingleTickerProviderStateMixi
     // 生成关注数 (5-500)
     final following = 5 + random.nextInt(496);
     
-    // 生成获赞数 (50-9999)
     final likes = 50 + random.nextInt(9950);
     
     return {
@@ -1935,24 +1882,23 @@ class _FeedCardState extends State<_FeedCard> with SingleTickerProviderStateMixi
     };
   }
 
-  // 根据用户名生成不同的个性签名
   String _generateUserSignature(String name) {
     final signatures = [
-      '热爱生活，享受每一天 ✨',
-      '记录生活的美好瞬间 📷',
-      '用心感受世界的温度 🌈',
-      '简单生活，快乐至上 😊',
-      '追逐梦想，永不放弃 💪',
-      '分享快乐，传递正能量 ☀️',
-      '慢生活，细品人生 🍃',
-      '做自己喜欢的事 🎨',
-      '保持热爱，奔赴山海 🌊',
-      '生活需要仪式感 ✨',
-      '平凡日子里的小确幸 🌸',
-      '用镜头记录生活 📸',
-      '热爱可抵岁月漫长 🌟',
-      '愿你眼中有光，心中有爱 💖',
-      '做一个温暖的人 🌻',
+      '偶尔发点日常',
+      '在吃，别叫我',
+      '周末一般不出门',
+      '下班路上随便拍',
+      '想养只猫还在纠结',
+      '坐标南方，怕冷',
+      '球打得一般',
+      '咖啡只喝美式',
+      '最近在学做饭',
+      '别私信推销',
+      '晚睡晚期患者',
+      '有事留言',
+      '不接广告',
+      '偶尔回消息',
+      '路过看看',
     ];
     
     final seed = name.hashCode.abs();
@@ -1991,7 +1937,7 @@ class _FeedCardState extends State<_FeedCard> with SingleTickerProviderStateMixi
           borderRadius: BorderRadius.circular(12),
           boxShadow: [
             BoxShadow(
-              color: const Color(0xFF9D31FF).withValues(alpha: 0.08),
+              color: const Color(0xFFC94A5A).withValues(alpha: 0.08),
               blurRadius: 8,
               offset: const Offset(0, 2),
             ),
@@ -2168,7 +2114,7 @@ class _FeedCardState extends State<_FeedCard> with SingleTickerProviderStateMixi
         borderRadius: BorderRadius.circular(8),
         child: AspectRatio(
           aspectRatio: 16 / 9,
-          child: Image.network(
+          child: AppImage(
             images[0],
             fit: BoxFit.cover,
           ),
@@ -2186,7 +2132,7 @@ class _FeedCardState extends State<_FeedCard> with SingleTickerProviderStateMixi
                       ),
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(8),
-                        child: Image.network(
+                        child: AppImage(
                           url,
                           fit: BoxFit.cover,
                         ),
@@ -2210,7 +2156,7 @@ class _FeedCardState extends State<_FeedCard> with SingleTickerProviderStateMixi
         itemBuilder: (context, index) {
           return ClipRRect(
             borderRadius: BorderRadius.circular(8),
-            child: Image.network(
+            child: AppImage(
               images[index],
               fit: BoxFit.cover,
             ),
@@ -2279,7 +2225,7 @@ class _FollowButtonState extends State<_FollowButton> with SingleTickerProviderS
             gradient: _isFollowing
                 ? null
                 : const LinearGradient(
-                    colors: [Color(0xFF9D31FF), Color(0xFFF260FF), Color(0xFFFF609F)],
+                    colors: [Color(0xFFC94A5A), Color(0xFFE07A6A), Color(0xFFEBA89A)],
                   ),
             color: _isFollowing ? Colors.grey[200] : null,
             borderRadius: BorderRadius.circular(20),

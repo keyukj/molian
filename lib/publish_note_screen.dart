@@ -118,12 +118,12 @@ class _PublishNoteScreenState extends State<PublishNoteScreen> with SingleTicker
                   duration: const Duration(milliseconds: 200),
                   decoration: BoxDecoration(
                     gradient: const LinearGradient(
-                      colors: [Color(0xFF9D31FF), Color(0xFFF260FF), Color(0xFFFF609F)],
+                      colors: [Color(0xFFC94A5A), Color(0xFFE07A6A), Color(0xFFEBA89A)],
                     ),
                     borderRadius: BorderRadius.circular(20),
                     boxShadow: [
                       BoxShadow(
-                        color: const Color(0xFF9D31FF).withValues(alpha: 0.3),
+                        color: const Color(0xFFC94A5A).withValues(alpha: 0.3),
                         blurRadius: 8,
                         offset: const Offset(0, 2),
                       ),
@@ -173,7 +173,7 @@ class _PublishNoteScreenState extends State<PublishNoteScreen> with SingleTicker
             color: const Color(0xFFF3E8FF),
             borderRadius: BorderRadius.circular(10),
           ),
-          child: const Icon(Icons.calendar_today, size: 16, color: Color(0xFF9D31FF)),
+          child: const Icon(Icons.calendar_today, size: 16, color: Color(0xFFC94A5A)),
         ),
         const SizedBox(width: 10),
         Text(
@@ -239,13 +239,13 @@ class _PublishNoteScreenState extends State<PublishNoteScreen> with SingleTicker
                       color: isSelected ? const Color(0xFFF3E8FF) : Colors.white,
                       borderRadius: BorderRadius.circular(16),
                       border: Border.all(
-                        color: isSelected ? const Color(0xFF9D31FF) : Colors.grey[300]!,
+                        color: isSelected ? const Color(0xFFC94A5A) : Colors.grey[300]!,
                         width: 2,
                       ),
                       boxShadow: isSelected
                           ? [
                               BoxShadow(
-                                color: const Color(0xFF9D31FF).withValues(alpha: 0.2),
+                                color: const Color(0xFFC94A5A).withValues(alpha: 0.2),
                                 blurRadius: 12,
                                 offset: const Offset(0, 4),
                               ),
@@ -270,7 +270,7 @@ class _PublishNoteScreenState extends State<PublishNoteScreen> with SingleTicker
                           mood['label']!,
                           style: TextStyle(
                             fontSize: 12,
-                            color: isSelected ? const Color(0xFF9D31FF) : Colors.grey[600],
+                            color: isSelected ? const Color(0xFFC94A5A) : Colors.grey[600],
                             fontWeight: FontWeight.w500,
                           ),
                         ),
@@ -317,7 +317,7 @@ class _PublishNoteScreenState extends State<PublishNoteScreen> with SingleTicker
               padding: const EdgeInsets.all(6),
               decoration: BoxDecoration(
                 gradient: const LinearGradient(
-                  colors: [Color(0xFF9D31FF), Color(0xFFF260FF)],
+                  colors: [Color(0xFFC94A5A), Color(0xFFE07A6A)],
                 ),
                 borderRadius: BorderRadius.circular(8),
               ),
@@ -363,7 +363,7 @@ class _PublishNoteScreenState extends State<PublishNoteScreen> with SingleTicker
             color: Colors.grey[200],
             boxShadow: [
               BoxShadow(
-                color: const Color(0xFF9D31FF).withValues(alpha: 0.1),
+                color: const Color(0xFFC94A5A).withValues(alpha: 0.1),
                 blurRadius: 8,
                 offset: const Offset(0, 2),
               ),
@@ -413,7 +413,7 @@ class _PublishNoteScreenState extends State<PublishNoteScreen> with SingleTicker
         width: 106,
         height: 106,
         decoration: BoxDecoration(
-          color: const Color(0xFFF8F9FD),
+          color: const Color(0xFFF5F3F1),
           borderRadius: BorderRadius.circular(16),
           border: Border.all(color: Colors.grey[300]!, width: 2, style: BorderStyle.solid),
         ),
@@ -453,7 +453,7 @@ class _PublishNoteScreenState extends State<PublishNoteScreen> with SingleTicker
             ScaffoldMessenger.of(context).showSnackBar(
               SnackBar(
                 content: const Text('最多只能添加9张图片'),
-                backgroundColor: const Color(0xFF9D31FF),
+                backgroundColor: const Color(0xFFC94A5A),
                 behavior: SnackBarBehavior.floating,
                 shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
               ),
@@ -493,7 +493,7 @@ class _PublishNoteScreenState extends State<PublishNoteScreen> with SingleTicker
               Text('笔记已保存'),
             ],
           ),
-          backgroundColor: const Color(0xFF9D31FF),
+          backgroundColor: const Color(0xFFC94A5A),
           behavior: SnackBarBehavior.floating,
           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
         ),

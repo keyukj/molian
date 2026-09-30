@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'widgets/app_image.dart';
 import 'post_detail_screen.dart';
 import 'user_manager.dart';
 
@@ -36,11 +37,9 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
     _userFeeds = _generateUserFeeds();
   }
 
-  // 根据用户名生成不同的动态
   List<Map<String, dynamic>> _generateUserFeeds() {
     final feeds = <Map<String, dynamic>>[];
     
-    // 第一条动态：如果有主页动态数据，使用它；否则生成默认动态
     if (widget.mainFeed != null) {
       feeds.add({
         'time': widget.mainFeed!['time'],
@@ -51,39 +50,35 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
       });
     }
     
-    // 使用用户名的哈希值作为种子，生成不同的动态
     final seed = widget.name.hashCode.abs();
     final random = _SeededRandom(seed);
     
-    // 扩展的动态内容池
     final contentPool = [
-      {'content': '周末去爬山啦🏔️ 虽然累到腿软，但站在山顶看到云海的那一刻，觉得一切都值得了！', 'images': ['https://picsum.photos/seed/hike1/400/400', 'https://picsum.photos/seed/hike2/400/400']},
-      {'content': '今天在咖啡馆偶遇了大学同学，聊了好久好久☕️ 时光飞逝，但友谊依旧～', 'images': ['https://picsum.photos/seed/meet1/400/400']},
-      {'content': '终于把阳台改造完成了🌿 种了好多绿植，每天早上起来看到这些小生命就觉得很治愈', 'images': ['https://picsum.photos/seed/garden1/400/400', 'https://picsum.photos/seed/garden2/400/400']},
-      {'content': '夜跑打卡🏃‍♀️ 从最初的坚持不了1公里，到现在轻松跑5公里，真的很有成就感！', 'images': ['https://picsum.photos/seed/run1/400/400']},
-      {'content': '周末在家学做手工，第一次尝试折纸鹤，虽然有点丑但是很有成就感哈哈哈🦢', 'images': ['https://picsum.photos/seed/diy1/400/400', 'https://picsum.photos/seed/diy2/400/400']},
-      {'content': '今天心情不太好，去海边走了走，看着海浪一波一波的，突然觉得什么烦恼都不算什么了🌊', 'images': ['https://picsum.photos/seed/beach1/400/400']},
-      {'content': '和闺蜜们一起去逛街啦！买了好多好看的衣服，开心到飞起✨', 'images': ['https://picsum.photos/seed/shop1/400/400', 'https://picsum.photos/seed/shop2/400/400']},
-      {'content': '研究新菜谱，做了一桌子菜请朋友们来吃饭🍜 大家都说好吃，太有成就感了！', 'images': ['https://picsum.photos/seed/meal1/400/400']},
-      {'content': '图书馆学习ing📚 准备下个月的考试，加油加油！顺便拍了张照片记录一下', 'images': ['https://picsum.photos/seed/library1/400/400']},
-      {'content': '下班路上偶遇超美的晚霞🌅 赶紧拍下来分享给大家！这个城市真的很美', 'images': ['https://picsum.photos/seed/sky1/400/400']},
-      {'content': '第一次尝试做提拉米苏，虽然卖相不太好，但味道还不错！下次继续努力💪', 'images': ['https://picsum.photos/seed/tiramisu1/400/400']},
-      {'content': '今天去参加了朋友的婚礼💐 看着她穿着婚纱的样子真的好美，祝福她们永远幸福！', 'images': ['https://picsum.photos/seed/wed1/400/400', 'https://picsum.photos/seed/wed2/400/400']},
-      {'content': '终于拿到驾照啦🚗 从科一到科四一路过关，感谢教练的耐心指导！', 'images': ['https://picsum.photos/seed/license1/400/400']},
-      {'content': '早上被闹钟吵醒，发现外面在下雪❄️ 立刻爬起来冲到阳台，好久没见过这么大的雪了！', 'images': ['https://picsum.photos/seed/winter1/400/400']},
-      {'content': '加班到深夜终于完成了这个项目的最后一个模块💻 虽然累但是看到代码跑通的那一刻，所有辛苦都值得了！', 'images': ['https://picsum.photos/seed/code1/400/400']},
-      {'content': '今天天气太好了！约了几个朋友去公园打羽毛球，出了一身汗，感觉整个人都轻松了😊', 'images': ['https://picsum.photos/seed/badminton1/400/400']},
-      {'content': '终于把这个月的工作报告搞定了！奖励自己一杯奶茶🧋 最近加班太多了，要好好休息一下', 'images': ['https://picsum.photos/seed/tea1/400/400']},
-      {'content': '早起看到窗外下雨了☔️ 突然很想喝一碗热乎乎的馄饨，于是出门找了家老店，果然没让我失望！', 'images': ['https://picsum.photos/seed/wonton1/400/400']},
+      {'content': '周末爬了半座山，膝盖有点抗议。下山买了瓶冰汽水。', 'images': ['assets/feed/hike1.jpg', 'assets/feed/hike2.jpg']},
+      {'content': '咖啡馆碰到以前同学，聊了半小时工作，各请一杯就走了。', 'images': ['assets/feed/coffee_meet.jpg']},
+      {'content': '阳台多了两盆绿萝，浇水浇多了，托盘积水。', 'images': ['assets/feed/plants.jpg']},
+      {'content': '夜跑两公里就停了。至少出门了。', 'images': ['assets/feed/jogging.jpg']},
+      {'content': '折了只纸鹤，翅膀一边高一边低。', 'images': ['assets/feed/origami.jpg']},
+      {'content': '情绪一般，去江边转了转。风挺大。', 'images': ['assets/feed/river1.jpg']},
+      {'content': '商场逛了一圈，只买了双袜子。', 'images': ['assets/feed/socks.jpg']},
+      {'content': '炒了三个菜，最后一个糊了，朋友还是吃完了。', 'images': ['assets/feed/cooking.jpg']},
+      {'content': '图书馆角落座位，耳机白噪音，效率还行。', 'images': ['assets/feed/library.jpg']},
+      {'content': '天桥上看见晚霞，站了一会儿才想起拍照。', 'images': ['assets/feed/sunset.jpg']},
+      {'content': '蛋糕塌了半边，室友说能吃就行。', 'images': ['assets/feed/cake.jpg']},
+      {'content': '同事婚礼，空调太冷，披了外套。', 'images': ['assets/feed/wedding1.jpg', 'assets/feed/wedding2.jpg']},
+      {'content': '驾照科目四过了。教练人挺好。', 'images': ['assets/feed/driving.jpg']},
+      {'content': '早上窗外在下雪，拍了一张就回去睡了。', 'images': ['assets/feed/snow.jpg']},
+      {'content': '项目收尾，半夜才合上电脑。明天补觉。', 'images': ['assets/feed/nightcode.jpg']},
+      {'content': '羽毛球双打输了，下次换搭档。', 'images': ['assets/feed/badminton.jpg']},
+      {'content': '报告交了，奶茶店写错我名字。', 'images': ['assets/feed/milktea.jpg']},
+      {'content': '下雨天去吃馄饨，老板还记得我多加葱。', 'images': ['assets/feed/wonton.jpg']},
     ];
     
     final timePool = ['2小时前', '3小时前', '5小时前', '8小时前', '昨天', '2天前', '3天前'];
     
-    // 随机选择2-3条额外动态（确保不重复）
     final extraCount = 2 + random.nextInt(2);
     final selectedIndices = <int>{};
     
-    // 如果有主页动态，需要避免选择相同的内容
     final mainContent = widget.mainFeed?['content'] as String?;
     
     while (selectedIndices.length < extraCount && selectedIndices.length < contentPool.length) {
@@ -111,7 +106,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFFAFBFF),
+      backgroundColor: const Color(0xFFFAF8F6),
       body: CustomScrollView(
         slivers: [
           // 顶部区域
@@ -132,7 +127,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                     end: Alignment.bottomCenter,
                     colors: [
                       Colors.white,
-                      const Color(0xFFF8F9FD).withValues(alpha: 0.3),
+                      const Color(0xFFF5F3F1).withValues(alpha: 0.3),
                     ],
                   ),
                 ),
@@ -152,7 +147,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                       borderRadius: BorderRadius.circular(24),
                       boxShadow: [
                         BoxShadow(
-                          color: const Color(0xFF9D31FF).withValues(alpha: 0.08),
+                          color: const Color(0xFFC94A5A).withValues(alpha: 0.08),
                           blurRadius: 20,
                           offset: const Offset(0, 8),
                         ),
@@ -172,11 +167,11 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                                 decoration: BoxDecoration(
                                   borderRadius: BorderRadius.circular(20),
                                   gradient: const LinearGradient(
-                                    colors: [Color(0xFF9D31FF), Color(0xFFF260FF)],
+                                    colors: [Color(0xFFC94A5A), Color(0xFFE07A6A)],
                                   ),
                                   boxShadow: [
                                     BoxShadow(
-                                      color: const Color(0xFF9D31FF).withValues(alpha: 0.3),
+                                      color: const Color(0xFFC94A5A).withValues(alpha: 0.3),
                                       blurRadius: 12,
                                       offset: const Offset(0, 4),
                                     ),
@@ -285,7 +280,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                                 ScaffoldMessenger.of(context).showSnackBar(
                                   SnackBar(
                                     content: Text(_isFollowing ? '已关注' : '已取消关注'),
-                                    backgroundColor: const Color(0xFF9D31FF),
+                                    backgroundColor: const Color(0xFFC94A5A),
                                     behavior: SnackBarBehavior.floating,
                                     shape: RoundedRectangleBorder(
                                       borderRadius: BorderRadius.circular(12),
@@ -294,7 +289,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                                 );
                               },
                               style: ElevatedButton.styleFrom(
-                                backgroundColor: _isFollowing ? Colors.grey[200] : const Color(0xFF9D31FF),
+                                backgroundColor: _isFollowing ? Colors.grey[200] : const Color(0xFFC94A5A),
                                 foregroundColor: _isFollowing ? Colors.grey[700] : Colors.white,
                                 elevation: 0,
                                 shape: RoundedRectangleBorder(
@@ -364,7 +359,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
     if (imagePath.startsWith('assets/')) {
       return Image.asset(imagePath, fit: BoxFit.cover);
     } else {
-      return Image.network(imagePath, fit: BoxFit.cover);
+      return AppImage(imagePath, fit: BoxFit.cover);
     }
   }
 
@@ -425,7 +420,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
           borderRadius: BorderRadius.circular(12),
           boxShadow: [
             BoxShadow(
-              color: const Color(0xFF9D31FF).withValues(alpha: 0.08),
+              color: const Color(0xFFC94A5A).withValues(alpha: 0.08),
               blurRadius: 8,
               offset: const Offset(0, 2),
             ),
@@ -503,7 +498,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
         borderRadius: BorderRadius.circular(8),
         child: AspectRatio(
           aspectRatio: 16 / 9,
-          child: Image.network(
+          child: AppImage(
             images[0],
             fit: BoxFit.cover,
           ),
@@ -521,7 +516,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
                       ),
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(8),
-                        child: Image.network(
+                        child: AppImage(
                           url,
                           fit: BoxFit.cover,
                         ),
@@ -545,7 +540,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
         itemBuilder: (context, index) {
           return ClipRRect(
             borderRadius: BorderRadius.circular(8),
-            child: Image.network(
+            child: AppImage(
               images[index],
               fit: BoxFit.cover,
             ),
@@ -731,7 +726,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
                   content: Text(successMessage),
-                  backgroundColor: const Color(0xFF9D31FF),
+                  backgroundColor: const Color(0xFFC94A5A),
                   behavior: SnackBarBehavior.floating,
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                 ),
@@ -745,7 +740,7 @@ class _UserProfileScreenState extends State<UserProfileScreen> {
             },
             child: const Text(
               '确定',
-              style: TextStyle(color: Color(0xFF9D31FF)),
+              style: TextStyle(color: Color(0xFFC94A5A)),
             ),
           ),
         ],

@@ -34,7 +34,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF8F9FD),
+      backgroundColor: const Color(0xFFF5F3F1),
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
@@ -57,7 +57,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             child: const Text(
               '保存',
               style: TextStyle(
-                color: Color(0xFF9D31FF),
+                color: Color(0xFFC94A5A),
                 fontSize: 16,
                 fontWeight: FontWeight.w600,
               ),
@@ -96,11 +96,11 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
               decoration: BoxDecoration(
                 borderRadius: BorderRadius.circular(24),
                 gradient: const LinearGradient(
-                  colors: [Color(0xFF9D31FF), Color(0xFFF260FF)],
+                  colors: [Color(0xFFC94A5A), Color(0xFFE07A6A)],
                 ),
                 boxShadow: [
                   BoxShadow(
-                    color: const Color(0xFF9D31FF).withValues(alpha: 0.3),
+                    color: const Color(0xFFC94A5A).withValues(alpha: 0.3),
                     blurRadius: 12,
                     offset: const Offset(0, 4),
                   ),
@@ -124,7 +124,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                 height: 32,
                 decoration: BoxDecoration(
                   gradient: const LinearGradient(
-                    colors: [Color(0xFF9D31FF), Color(0xFFF260FF)],
+                    colors: [Color(0xFFC94A5A), Color(0xFFE07A6A)],
                   ),
                   shape: BoxShape.circle,
                   border: Border.all(color: Colors.white, width: 2),
@@ -151,7 +151,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFF9D31FF).withValues(alpha: 0.04),
+            color: const Color(0xFFC94A5A).withValues(alpha: 0.04),
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),
@@ -194,7 +194,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFF9D31FF).withValues(alpha: 0.04),
+            color: const Color(0xFFC94A5A).withValues(alpha: 0.04),
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),
@@ -238,10 +238,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         decoration: BoxDecoration(
           gradient: isSelected
               ? const LinearGradient(
-                  colors: [Color(0xFF9D31FF), Color(0xFFF260FF)],
+                  colors: [Color(0xFFC94A5A), Color(0xFFE07A6A)],
                 )
               : null,
-          color: isSelected ? null : const Color(0xFFF8F9FD),
+          color: isSelected ? null : const Color(0xFFF5F3F1),
           borderRadius: BorderRadius.circular(12),
         ),
         child: Center(
@@ -265,7 +265,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFF9D31FF).withValues(alpha: 0.04),
+            color: const Color(0xFFC94A5A).withValues(alpha: 0.04),
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),
@@ -304,10 +304,10 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
                   decoration: BoxDecoration(
                     gradient: isSelected
                         ? const LinearGradient(
-                            colors: [Color(0xFF9D31FF), Color(0xFFF260FF)],
+                            colors: [Color(0xFFC94A5A), Color(0xFFE07A6A)],
                           )
                         : null,
-                    color: isSelected ? null : const Color(0xFFF8F9FD),
+                    color: isSelected ? null : const Color(0xFFF5F3F1),
                     borderRadius: BorderRadius.circular(20),
                   ),
                   child: Text(
@@ -368,7 +368,7 @@ class _EditProfileScreenState extends State<EditProfileScreen> {
             Text('保存成功！'),
           ],
         ),
-        backgroundColor: const Color(0xFF9D31FF),
+        backgroundColor: const Color(0xFFC94A5A),
         behavior: SnackBarBehavior.floating,
         shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
       ),

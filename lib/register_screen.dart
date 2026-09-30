@@ -64,7 +64,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               onPressed: () => Navigator.pop(context),
               style: TextButton.styleFrom(
                 padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
-                backgroundColor: const Color(0xFF9D31FF),
+                backgroundColor: const Color(0xFFC94A5A),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8),
                 ),
@@ -97,7 +97,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           style: TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: 18,
-            color: Color(0xFF9D31FF),
+            color: Color(0xFFC94A5A),
           ),
           textAlign: TextAlign.center,
         ),
@@ -119,7 +119,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
               },
               style: TextButton.styleFrom(
                 padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
-                backgroundColor: const Color(0xFF9D31FF),
+                backgroundColor: const Color(0xFFC94A5A),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8),
                 ),
@@ -148,7 +148,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           borderRadius: BorderRadius.circular(16),
         ),
         title: const Text(
-          '温馨提示',
+          '提示',
           style: TextStyle(
             fontWeight: FontWeight.bold,
             fontSize: 18,
@@ -199,7 +199,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                   },
                   style: TextButton.styleFrom(
                     padding: const EdgeInsets.symmetric(vertical: 12),
-                    backgroundColor: const Color(0xFF9D31FF),
+                    backgroundColor: const Color(0xFFC94A5A),
                     shape: RoundedRectangleBorder(
                       borderRadius: BorderRadius.circular(8),
                     ),
@@ -278,8 +278,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
             end: Alignment.bottomCenter,
             colors: [
               Colors.white,
-              const Color(0xFFF8F9FD).withValues(alpha: 0.5),
-              const Color(0xFFF8F9FD),
+              const Color(0xFFF5F3F1).withValues(alpha: 0.5),
+              const Color(0xFFF5F3F1),
             ],
           ),
         ),
@@ -324,14 +324,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
                         decoration: BoxDecoration(
                           gradient: const LinearGradient(
                             colors: [
-                              Color(0xFF9D31FF),
-                              Color(0xFFF260FF),
+                              Color(0xFFC94A5A),
+                              Color(0xFFE07A6A),
                             ],
                           ),
                           borderRadius: BorderRadius.circular(20),
                           boxShadow: [
                             BoxShadow(
-                              color: const Color(0xFF9D31FF).withValues(alpha: 0.3),
+                              color: const Color(0xFFC94A5A).withValues(alpha: 0.3),
                               blurRadius: 12,
                               offset: const Offset(0, 4),
                             ),
@@ -412,9 +412,9 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                 height: 18,
                                 margin: const EdgeInsets.only(top: 2, right: 6),
                                 decoration: BoxDecoration(
-                                  color: _isAgreed ? const Color(0xFF9D31FF) : Colors.white,
+                                  color: _isAgreed ? const Color(0xFFC94A5A) : Colors.white,
                                   border: Border.all(
-                                    color: _isAgreed ? const Color(0xFF9D31FF) : Colors.grey[400]!,
+                                    color: _isAgreed ? const Color(0xFFC94A5A) : Colors.grey[400]!,
                                     width: 1.5,
                                   ),
                                   borderRadius: BorderRadius.circular(4),
@@ -443,7 +443,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                     TextSpan(
                                       text: '隐私协议',
                                       style: const TextStyle(
-                                        color: Color(0xFF9D31FF),
+                                        color: Color(0xFFC94A5A),
                                         fontWeight: FontWeight.w500,
                                       ),
                                       recognizer: TapGestureRecognizer()
@@ -453,7 +453,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                     TextSpan(
                                       text: '用户协议',
                                       style: const TextStyle(
-                                        color: Color(0xFF9D31FF),
+                                        color: Color(0xFFC94A5A),
                                         fontWeight: FontWeight.w500,
                                       ),
                                       recognizer: TapGestureRecognizer()
@@ -516,7 +516,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
           ),
           prefixIcon: Icon(
             icon,
-            color: const Color(0xFF9D31FF),
+            color: const Color(0xFFC94A5A),
             size: 22,
           ),
           suffixIcon: isPassword
@@ -546,15 +546,15 @@ class _RegisterScreenState extends State<RegisterScreen> {
       decoration: BoxDecoration(
         gradient: const LinearGradient(
           colors: [
-            Color(0xFF9D31FF),
-            Color(0xFFF260FF),
-            Color(0xFFFF609F),
+            Color(0xFFC94A5A),
+            Color(0xFFE07A6A),
+            Color(0xFFEBA89A),
           ],
         ),
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFF9D31FF).withValues(alpha: 0.3),
+            color: const Color(0xFFC94A5A).withValues(alpha: 0.3),
             blurRadius: 12,
             offset: const Offset(0, 4),
           ),

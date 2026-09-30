@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'widgets/app_image.dart';
 import 'user_manager.dart';
 
 class PostDetailScreen extends StatefulWidget {
@@ -96,38 +97,30 @@ class _PostDetailScreenState extends State<PostDetailScreen> with TickerProvider
     ));
   }
   
-  // 生成随机评论
   List<Map<String, dynamic>> _generateComments() {
     final allComments = <Map<String, String>>[
-      {'name': '阿杰', 'avatar': 'https://images.unsplash.com/photo-1535713875002-d1d0cf377fde?w=100&h=100&fit=crop', 'content': '太棒了！我也想去试试'},
-      {'name': '林晓风', 'avatar': 'https://images.unsplash.com/photo-1438761681033-6461ffad8d80?w=100&h=100&fit=crop', 'content': '看起来很不错呢'},
-      {'name': '小鹿', 'avatar': 'https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop', 'content': '好羡慕啊！'},
-      {'name': '江南烟雨', 'avatar': 'https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop', 'content': '拍得真好看'},
-      {'name': '北辰', 'avatar': 'https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&h=100&fit=crop', 'content': '这个地方在哪里？'},
-      {'name': '柠檬茶', 'avatar': 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&h=100&fit=crop', 'content': '好想去打卡'},
-      {'name': '星河', 'avatar': 'https://images.unsplash.com/photo-1506794778202-cad84cf45f1d?w=100&h=100&fit=crop', 'content': '有没有攻略分享？'},
-      {'name': '温柔一刀', 'avatar': 'https://images.unsplash.com/photo-1517841905240-472988babdf9?w=100&h=100&fit=crop', 'content': '太美了！'},
-      {'name': '云朵', 'avatar': 'https://images.unsplash.com/photo-1539571696357-5a69c17a67c6?w=100&h=100&fit=crop', 'content': '下次一起去'},
-      {'name': '月下独酌', 'avatar': 'https://images.unsplash.com/photo-1524504388940-b1c1722653e1?w=100&h=100&fit=crop', 'content': '好喜欢这种风格'},
-      {'name': '清风', 'avatar': 'https://images.unsplash.com/photo-1492562080023-ab3db95bfbce?w=100&h=100&fit=crop', 'content': '拍照技术一流'},
-      {'name': '樱桃小丸子', 'avatar': 'https://images.unsplash.com/photo-1488426862026-3ee34a7d66df?w=100&h=100&fit=crop', 'content': '好想拥有同款'},
-      {'name': '时光', 'avatar': 'https://images.unsplash.com/photo-1531427186611-ecfd6d936c79?w=100&h=100&fit=crop', 'content': '这也太赞了吧'},
-      {'name': '南风知我意', 'avatar': 'https://images.unsplash.com/photo-1487412720507-e7ab37603c6f?w=100&h=100&fit=crop', 'content': '求详细地址'},
-      {'name': '浅笑', 'avatar': 'https://images.unsplash.com/photo-1519345182560-3f2917c472ef?w=100&h=100&fit=crop', 'content': '已收藏！'},
-      {'name': '墨染青衣', 'avatar': 'https://images.unsplash.com/photo-1502685104226-ee32379fefbe?w=100&h=100&fit=crop', 'content': '好治愈啊'},
-      {'name': '晨曦', 'avatar': 'https://images.unsplash.com/photo-1504257432389-52343af06ae3?w=100&h=100&fit=crop', 'content': '这个角度绝了'},
-      {'name': '花开半夏', 'avatar': 'https://images.unsplash.com/photo-1529626455594-4ff0802cfb7e?w=100&h=100&fit=crop', 'content': '好想去体验一下'},
-      {'name': '陌上', 'avatar': 'https://images.unsplash.com/photo-1507081323647-4d250478b919?w=100&h=100&fit=crop', 'content': '太有感觉了'},
-      {'name': '烟雨蒙蒙', 'avatar': 'https://images.unsplash.com/photo-1521119989659-a83eee488004?w=100&h=100&fit=crop', 'content': '爱了爱了'},
+      {'name': '阿杰', 'avatar': 'assets/images/ajie.jpg', 'content': '看着挺累的'},
+      {'name': '林小溪', 'avatar': 'assets/images/linxiaoxi.jpg', 'content': '这家我也去过'},
+      {'name': '夏末', 'avatar': 'assets/images/xiamo.jpg', 'content': '哈哈哈哈'},
+      {'name': '张晨', 'avatar': 'assets/images/zhangchen.jpg', 'content': '下次带我一个'},
+      {'name': '周小米', 'avatar': 'assets/images/zhouxiaomi.jpg', 'content': '卖相一般味道呢'},
+      {'name': '王浩然', 'avatar': 'assets/images/wanghaoran.jpg', 'content': '地儿在哪'},
+      {'name': '方雨欣', 'avatar': 'assets/images/fangyuxin.jpg', 'content': '羡慕了'},
+      {'name': '孙浩宇', 'avatar': 'assets/images/sunhaoyu.jpg', 'content': '同样的经历'},
+      {'name': '杨晓彤', 'avatar': 'assets/images/yangxiaotong.jpg', 'content': '拍得还行'},
+      {'name': '李明轩', 'avatar': 'assets/images/limingxuan.jpg', 'content': '雨天确实适合'},
+      {'name': '苏小暖', 'avatar': 'assets/images/suxiaonuan.jpg', 'content': '收到，收藏了'},
+      {'name': '陈思思', 'avatar': 'assets/images/default_avatar.jpg', 'content': '真实'},
+      {'name': '刘宇航', 'avatar': 'assets/images/default_avatar.jpg', 'content': '路过点个赞'},
+      {'name': '许梦瑶', 'avatar': 'assets/images/default_avatar.jpg', 'content': '有点想去'},
+      {'name': '吴昊天', 'avatar': 'assets/images/default_avatar.jpg', 'content': '加油'},
     ];
     
-    final times = ['刚刚', '2分钟前', '5分钟前', '10分钟前', '15分钟前', '30分钟前', '1小时前', '2小时前'];
+    final times = ['刚刚', '3分钟前', '12分钟前', '半小时前', '1小时前', '昨晚', '前天'];
     
-    // 使用动态内容的哈希值作为随机种子，确保同一条动态总是显示相同的评论
     final seed = widget.content.hashCode.abs();
     final random = _SeededRandom(seed);
     
-    // 使用传入的评论数量，确保与动态页显示的数量一致
     final commentCount = widget.comments;
     final selectedIndices = <int>{};
     
@@ -178,7 +171,7 @@ class _PostDetailScreenState extends State<PostDetailScreen> with TickerProvider
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF8F9FD),
+      backgroundColor: const Color(0xFFF5F3F1),
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
@@ -278,7 +271,7 @@ class _PostDetailScreenState extends State<PostDetailScreen> with TickerProvider
                         gradient: _isFollowing
                             ? null
                             : const LinearGradient(
-                                colors: [Color(0xFF9D31FF), Color(0xFFF260FF), Color(0xFFFF609F)],
+                                colors: [Color(0xFFC94A5A), Color(0xFFE07A6A), Color(0xFFEBA89A)],
                               ),
                         color: _isFollowing ? Colors.grey[200] : null,
                         borderRadius: BorderRadius.circular(20),
@@ -360,7 +353,7 @@ class _PostDetailScreenState extends State<PostDetailScreen> with TickerProvider
     if (images.length == 1) {
       return ClipRRect(
         borderRadius: BorderRadius.circular(12),
-        child: Image.network(
+        child: AppImage(
           images[0],
           width: double.infinity,
           fit: BoxFit.cover,
@@ -378,7 +371,7 @@ class _PostDetailScreenState extends State<PostDetailScreen> with TickerProvider
                       ),
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(12),
-                        child: Image.network(
+                        child: AppImage(
                           url,
                           fit: BoxFit.cover,
                         ),
@@ -402,7 +395,7 @@ class _PostDetailScreenState extends State<PostDetailScreen> with TickerProvider
         itemBuilder: (context, index) {
           return ClipRRect(
             borderRadius: BorderRadius.circular(12),
-            child: Image.network(
+            child: AppImage(
               images[index],
               fit: BoxFit.cover,
             ),
@@ -525,7 +518,7 @@ class _PostDetailScreenState extends State<PostDetailScreen> with TickerProvider
             Expanded(
               child: Container(
                 decoration: BoxDecoration(
-                  color: const Color(0xFFF8F9FD),
+                  color: const Color(0xFFF5F3F1),
                   borderRadius: BorderRadius.circular(24),
                 ),
                 child: TextField(
@@ -552,7 +545,7 @@ class _PostDetailScreenState extends State<PostDetailScreen> with TickerProvider
                       ScaffoldMessenger.of(context).showSnackBar(
                         SnackBar(
                           content: const Text('评论已发送'),
-                          backgroundColor: const Color(0xFF9D31FF),
+                          backgroundColor: const Color(0xFFC94A5A),
                           behavior: SnackBarBehavior.floating,
                           shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                         ),
@@ -578,7 +571,7 @@ class _PostDetailScreenState extends State<PostDetailScreen> with TickerProvider
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
                       content: const Text('评论已发送'),
-                      backgroundColor: const Color(0xFF9D31FF),
+                      backgroundColor: const Color(0xFFC94A5A),
                       behavior: SnackBarBehavior.floating,
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                     ),
@@ -590,7 +583,7 @@ class _PostDetailScreenState extends State<PostDetailScreen> with TickerProvider
                 padding: const EdgeInsets.all(10),
                 decoration: BoxDecoration(
                   gradient: const LinearGradient(
-                    colors: [Color(0xFF9D31FF), Color(0xFFF260FF)],
+                    colors: [Color(0xFFC94A5A), Color(0xFFE07A6A)],
                   ),
                   borderRadius: BorderRadius.circular(20),
                 ),
@@ -657,7 +650,7 @@ class _PostDetailScreenState extends State<PostDetailScreen> with TickerProvider
                   ScaffoldMessenger.of(context).showSnackBar(
                     SnackBar(
                       content: const Text('已屏蔽该动态'),
-                      backgroundColor: const Color(0xFF9D31FF),
+                      backgroundColor: const Color(0xFFC94A5A),
                       behavior: SnackBarBehavior.floating,
                       shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                     ),
@@ -767,7 +760,7 @@ class _PostDetailScreenState extends State<PostDetailScreen> with TickerProvider
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
                   content: Text(successMessage),
-                  backgroundColor: const Color(0xFF9D31FF),
+                  backgroundColor: const Color(0xFFC94A5A),
                   behavior: SnackBarBehavior.floating,
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                 ),
@@ -783,7 +776,7 @@ class _PostDetailScreenState extends State<PostDetailScreen> with TickerProvider
             },
             child: const Text(
               '确定',
-              style: TextStyle(color: Color(0xFF9D31FF)),
+              style: TextStyle(color: Color(0xFFC94A5A)),
             ),
           ),
         ],
@@ -820,7 +813,7 @@ class _PostDetailScreenState extends State<PostDetailScreen> with TickerProvider
               ScaffoldMessenger.of(context).showSnackBar(
                 SnackBar(
                   content: const Text('动态已删除'),
-                  backgroundColor: const Color(0xFF9D31FF),
+                  backgroundColor: const Color(0xFFC94A5A),
                   behavior: SnackBarBehavior.floating,
                   shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
                 ),

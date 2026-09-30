@@ -102,7 +102,7 @@ class _MolianStoreViewState extends State<MolianStoreView>
     ScaffoldMessenger.of(context).showSnackBar(
       SnackBar(
         content: Text(message),
-        backgroundColor: const Color(0xFF9D31FF),
+        backgroundColor: const Color(0xFFC94A5A),
         behavior: SnackBarBehavior.floating,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12),
@@ -167,7 +167,7 @@ class _MolianStoreViewState extends State<MolianStoreView>
                         children: [
                           CircularProgressIndicator(
                             valueColor: AlwaysStoppedAnimation<Color>(
-                                Color(0xFF9D31FF)),
+                                Color(0xFFC94A5A)),
                           ),
                           SizedBox(height: 16),
                           Text(
@@ -220,14 +220,14 @@ class _MolianStoreViewState extends State<MolianStoreView>
       padding: const EdgeInsets.all(20),
       decoration: BoxDecoration(
         gradient: LinearGradient(
-          colors: [Color(0xFF9D31FF), Color(0xFFB85EFF)],
+          colors: [Color(0xFFC94A5A), Color(0xFFB85EFF)],
           begin: Alignment.topLeft,
           end: Alignment.bottomRight,
         ),
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-            color: Color(0x4D9D31FF), // 0.3 opacity
+            color: Color(0x4DC94A5A), // 0.3 opacity
             blurRadius: 20,
             offset: Offset(0, 10),
           ),
@@ -373,7 +373,7 @@ class _MolianStoreViewState extends State<MolianStoreView>
                   decoration: BoxDecoration(
                     gradient: LinearGradient(
                       colors: (isAvailable && !isThisProcessing)
-                          ? [Color(0xFF9D31FF), Color(0xFFB85EFF)]
+                          ? [Color(0xFFC94A5A), Color(0xFFB85EFF)]
                           : [Colors.grey[300]!, Colors.grey[400]!],
                       begin: Alignment.topLeft,
                       end: Alignment.bottomRight,
@@ -382,7 +382,7 @@ class _MolianStoreViewState extends State<MolianStoreView>
                     boxShadow: (isAvailable && !isThisProcessing)
                         ? [
                             BoxShadow(
-                              color: Color(0x4D9D31FF), // 0.3 opacity
+                              color: Color(0x4DC94A5A), // 0.3 opacity
                               blurRadius: 3,
                               offset: Offset(0, 1),
                             ),

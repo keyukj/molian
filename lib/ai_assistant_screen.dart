@@ -28,7 +28,7 @@ class _AIAssistantScreenState extends State<AIAssistantScreen> {
     _userManager.addListener(_onUserInfoChanged);
     _messages.add({
       'role': 'assistant',
-      'content': '你好！我是AI助手，有什么可以帮助你的吗？😊\n\n💡 温馨提示：每次对话消耗10金币',
+      'content': '我是小探，可以陪你聊聊发帖点子、怎么回消息，或者随便吐槽两句。\n每条消息扣 10 金币。',
       'timestamp': DateTime.now(),
     });
   }
@@ -76,7 +76,10 @@ class _AIAssistantScreenState extends State<AIAssistantScreen> {
         body: jsonEncode({
           'model': 'deepseek-chat',
           'messages': [
-            {'role': 'system', 'content': 'You are a helpful assistant.'},
+            {
+              'role': 'system',
+              'content': '你是探友 App 里的「小探」，说话口语化、简短，帮用户想社交动态文案、回复消息、或陪聊。不要自称 AI，不要用条目清单除非用户要求。',
+            },
             {'role': 'user', 'content': message},
           ],
           'stream': false,
@@ -99,7 +102,7 @@ class _AIAssistantScreenState extends State<AIAssistantScreen> {
         setState(() {
           _messages.add({
             'role': 'assistant',
-            'content': '抱歉，API请求失败（状态码: ${response.statusCode}）',
+            'content': '没连上，过会儿再试（${response.statusCode}）',
             'timestamp': DateTime.now(),
           });
           _isLoading = false;
@@ -109,7 +112,7 @@ class _AIAssistantScreenState extends State<AIAssistantScreen> {
       setState(() {
         _messages.add({
           'role': 'assistant',
-          'content': '抱歉，发生了错误：$e',
+          'content': '出了点问题，稍后再聊。',
           'timestamp': DateTime.now(),
         });
         _isLoading = false;
@@ -130,7 +133,7 @@ class _AIAssistantScreenState extends State<AIAssistantScreen> {
           '金币不足',
           style: TextStyle(
             fontWeight: FontWeight.w600,
-            color: Color(0xFF9D31FF),
+            color: Color(0xFFC94A5A),
           ),
           textAlign: TextAlign.center,
         ),
@@ -145,7 +148,7 @@ class _AIAssistantScreenState extends State<AIAssistantScreen> {
               onPressed: () => Navigator.pop(context),
               style: TextButton.styleFrom(
                 padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 12),
-                backgroundColor: const Color(0xFF9D31FF),
+                backgroundColor: const Color(0xFFC94A5A),
                 shape: RoundedRectangleBorder(
                   borderRadius: BorderRadius.circular(8),
                 ),
@@ -179,33 +182,38 @@ class _AIAssistantScreenState extends State<AIAssistantScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF8F9FD),
+      backgroundColor: const Color(0xFFF5F3F1),
       body: Column(
         children: [
           Container(
-            decoration: const BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                colors: [Color(0xFF9D31FF), Color(0xFFF260FF), Color(0xFFFF609F)],
-              ),
-            ),
+            color: const Color(0xFFC94A5A),
             child: SafeArea(
               child: Padding(
                 padding: const EdgeInsets.all(20),
                 child: Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
+                    if (Navigator.canPop(context))
+                      Padding(
+                        padding: const EdgeInsets.only(right: 8, top: 2),
+                        child: IconButton(
+                          padding: EdgeInsets.zero,
+                          constraints: const BoxConstraints(),
+                          icon: const Icon(Icons.arrow_back_ios,
+                              color: Colors.white, size: 18),
+                          onPressed: () => Navigator.pop(context),
+                        ),
+                      ),
                     Expanded(
                       child: Column(
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           const Text(
-                            'AI助手',
+                            '小探',
                             style: TextStyle(
                               color: Colors.white,
                               fontSize: 24,
-                              fontWeight: FontWeight.bold,
+                              fontWeight: FontWeight.w700,
                             ),
                           ),
                           const SizedBox(height: 8),
@@ -290,7 +298,7 @@ class _AIAssistantScreenState extends State<AIAssistantScreen> {
                       borderRadius: BorderRadius.circular(12),
                       boxShadow: [
                         BoxShadow(
-                          color: const Color(0xFF9D31FF).withValues(alpha: 0.1),
+                          color: const Color(0xFFC94A5A).withValues(alpha: 0.1),
                           blurRadius: 8,
                           offset: const Offset(0, 2),
                         ),
@@ -305,13 +313,13 @@ class _AIAssistantScreenState extends State<AIAssistantScreen> {
                           child: CircularProgressIndicator(
                             strokeWidth: 2,
                             valueColor: AlwaysStoppedAnimation<Color>(
-                              const Color(0xFF9D31FF),
+                              const Color(0xFFC94A5A),
                             ),
                           ),
                         ),
                         const SizedBox(width: 8),
                         Text(
-                          'AI正在思考...',
+                          '小探在想…',
                           style: TextStyle(
                             color: Colors.grey[600],
                             fontSize: 14,
@@ -343,7 +351,7 @@ class _AIAssistantScreenState extends State<AIAssistantScreen> {
                     Expanded(
                       child: Container(
                         decoration: BoxDecoration(
-                          color: const Color(0xFFF8F9FD),
+                          color: const Color(0xFFF5F3F1),
                           borderRadius: BorderRadius.circular(24),
                         ),
                         child: TextField(
@@ -371,12 +379,12 @@ class _AIAssistantScreenState extends State<AIAssistantScreen> {
                         height: 48,
                         decoration: BoxDecoration(
                           gradient: const LinearGradient(
-                            colors: [Color(0xFF9D31FF), Color(0xFFF260FF)],
+                            colors: [Color(0xFFC94A5A), Color(0xFFE07A6A)],
                           ),
                           borderRadius: BorderRadius.circular(24),
                           boxShadow: [
                             BoxShadow(
-                              color: const Color(0xFF9D31FF).withValues(alpha: 0.3),
+                              color: const Color(0xFFC94A5A).withValues(alpha: 0.3),
                               blurRadius: 8,
                               offset: const Offset(0, 2),
                             ),
@@ -416,12 +424,12 @@ class _AIAssistantScreenState extends State<AIAssistantScreen> {
               height: 36,
               decoration: BoxDecoration(
                 gradient: const LinearGradient(
-                  colors: [Color(0xFF9D31FF), Color(0xFFF260FF)],
+                  colors: [Color(0xFFC94A5A), Color(0xFFE07A6A)],
                 ),
                 borderRadius: BorderRadius.circular(18),
               ),
               child: const Icon(
-                Icons.smart_toy,
+                Icons.chat_bubble_outline,
                 color: Colors.white,
                 size: 20,
               ),
@@ -437,7 +445,7 @@ class _AIAssistantScreenState extends State<AIAssistantScreen> {
                   decoration: BoxDecoration(
                     gradient: isUser
                         ? const LinearGradient(
-                            colors: [Color(0xFF9D31FF), Color(0xFFF260FF)],
+                            colors: [Color(0xFFC94A5A), Color(0xFFE07A6A)],
                           )
                         : null,
                     color: isUser ? null : Colors.white,
@@ -445,7 +453,7 @@ class _AIAssistantScreenState extends State<AIAssistantScreen> {
                     boxShadow: [
                       BoxShadow(
                         color: isUser
-                            ? const Color(0xFF9D31FF).withValues(alpha: 0.2)
+                            ? const Color(0xFFC94A5A).withValues(alpha: 0.2)
                             : Colors.grey.withValues(alpha: 0.1),
                         blurRadius: 8,
                         offset: const Offset(0, 2),

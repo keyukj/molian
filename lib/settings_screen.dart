@@ -11,7 +11,7 @@ class SettingsScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF8F9FD),
+      backgroundColor: const Color(0xFFF5F3F1),
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
@@ -118,7 +118,7 @@ class SettingsScreen extends StatelessWidget {
         borderRadius: BorderRadius.circular(16),
         boxShadow: [
           BoxShadow(
-            color: const Color(0xFF9D31FF).withValues(alpha: 0.04),
+            color: const Color(0xFFC94A5A).withValues(alpha: 0.04),
             blurRadius: 8,
             offset: const Offset(0, 2),
           ),
@@ -139,13 +139,13 @@ class SettingsScreen extends StatelessWidget {
                   decoration: BoxDecoration(
                     gradient: LinearGradient(
                       colors: [
-                        const Color(0xFF9D31FF).withValues(alpha: 0.1),
-                        const Color(0xFFF260FF).withValues(alpha: 0.1),
+                        const Color(0xFFC94A5A).withValues(alpha: 0.1),
+                        const Color(0xFFE07A6A).withValues(alpha: 0.1),
                       ],
                     ),
                     borderRadius: BorderRadius.circular(14),
                   ),
-                  child: Icon(icon, color: const Color(0xFF9D31FF), size: 24),
+                  child: Icon(icon, color: const Color(0xFFC94A5A), size: 24),
                 ),
                 const SizedBox(width: 16),
                 Expanded(
@@ -256,7 +256,7 @@ class SettingsScreen extends StatelessWidget {
             },
             child: const Text(
               '确定',
-              style: TextStyle(color: Color(0xFF9D31FF)),
+              style: TextStyle(color: Color(0xFFC94A5A)),
             ),
           ),
         ],

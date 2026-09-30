@@ -6,7 +6,7 @@ class AboutScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: const Color(0xFFF8F9FD),
+      backgroundColor: const Color(0xFFF5F3F1),
       appBar: AppBar(
         backgroundColor: Colors.white,
         elevation: 0,
@@ -30,7 +30,6 @@ class AboutScreen extends StatelessWidget {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              // Logo
               Container(
                 width: 120,
                 height: 120,
@@ -38,7 +37,7 @@ class AboutScreen extends StatelessWidget {
                   borderRadius: BorderRadius.circular(32),
                   boxShadow: [
                     BoxShadow(
-                      color: const Color(0xFF9D31FF).withValues(alpha: 0.3),
+                      color: const Color(0xFFC94A5A).withValues(alpha: 0.3),
                       blurRadius: 24,
                       offset: const Offset(0, 8),
                     ),
@@ -55,29 +54,18 @@ class AboutScreen extends StatelessWidget {
               
               const SizedBox(height: 32),
               
-              // App 名称
-              ShaderMask(
-                shaderCallback: (bounds) => const LinearGradient(
-                  colors: [
-                    Color(0xFF9D31FF),
-                    Color(0xFFF260FF),
-                    Color(0xFFFF609F),
-                  ],
-                ).createShader(bounds),
-                child: const Text(
-                  '探友',
-                  style: TextStyle(
-                    fontSize: 36,
-                    fontWeight: FontWeight.bold,
-                    color: Colors.white,
-                    letterSpacing: 2,
-                  ),
+              const Text(
+                '探友',
+                style: TextStyle(
+                  fontSize: 34,
+                  fontWeight: FontWeight.w700,
+                  color: Color(0xFFC94A5A),
+                  letterSpacing: 1,
                 ),
               ),
               
               const SizedBox(height: 12),
               
-              // 版本号
               Container(
                 padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 6),
                 decoration: BoxDecoration(
@@ -85,7 +73,7 @@ class AboutScreen extends StatelessWidget {
                   borderRadius: BorderRadius.circular(20),
                   boxShadow: [
                     BoxShadow(
-                      color: const Color(0xFF9D31FF).withValues(alpha: 0.08),
+                      color: const Color(0xFFC94A5A).withValues(alpha: 0.08),
                       blurRadius: 8,
                       offset: const Offset(0, 2),
                     ),
@@ -103,9 +91,8 @@ class AboutScreen extends StatelessWidget {
               
               const SizedBox(height: 32),
               
-              // 宣传语
               Text(
-                '每一个故事都值得被分享',
+                '轻社交，记日常',
                 style: TextStyle(
                   fontSize: 16,
                   color: Colors.grey[600],
