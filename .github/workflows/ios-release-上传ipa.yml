@@ -70,7 +70,7 @@ jobs:
       - name: Upload IPA using official xcrun altool
         shell: bash
         env:
-          APPLE_USERNAME: 'huang11huang223@163.com'
+          APPLE_USERNAME: '3922066727@qq.com'
           APPLE_PASSWORD: 'ymqv-rqap-zncj-bkqk'
         run: |
           set -euo pipefail
